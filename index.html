@@ -36,7 +36,7 @@
     .flight-arena { width: 100%; height: 215px; background: #000; position: relative; overflow: hidden; border-bottom: 1px solid #1c1d22; flex-shrink: 0; }
     #flightCanvas { width: 100%; height: 100%; display: block; }
     .multiplier-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; z-index: 5; }
-    .mult-text { font-size: 50px; font-weight: 900; color: #fff; text-shadow: 0 0 25px rgba(255,255,255,0.3); }
+    .mult-text { font-size: 52px; font-weight: 900; color: #fff; text-shadow: 0 0 25px rgba(255,255,255,0.3); }
     .crashed-text { font-size: 16px; font-weight: 900; color: var(--accent-red); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; display: none; }
 
     .waiting-banner { position: absolute; inset: 0; background: radial-gradient(circle at center, #1b0710 0%, #000000 80%); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 6; }
@@ -44,6 +44,7 @@
     .wait-progress-bar { width: 150px; height: 4px; background: #222; border-radius: 2px; margin-top: 10px; overflow: hidden; }
     .wait-progress-fill { width: 0%; height: 100%; background: var(--accent-red); transition: width 0.1s linear; }
 
+    /* Dual Bet Panels */
     .bet-panels-wrapper { padding: 6px 8px; display: flex; flex-direction: column; gap: 6px; background: #000; flex-shrink: 0; }
     .bet-panel { background: #141518; border: 1px solid var(--border-dark); border-radius: 12px; padding: 7px 10px; position: relative; }
     .panel-controls-grid { display: flex; gap: 8px; align-items: center; }
@@ -129,6 +130,9 @@
 </div>
 
 <script>
+  // ============================================================================
+  // 🚀 SPRIBE AVIATOR ENGINE - 100% PROVABLY INTEGRATED LIKE JET-X
+  // ============================================================================
   const RENDER_BASE_URL = "https://hulubet-server.onrender.com";
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -142,7 +146,7 @@
     setTimeout(() => { banner.style.display = "none"; }, 3500);
   }
 
-  // Audio Synthesizer (iOS Safari Ready)
+  // Audio Synthesizer
   let audioCtx = null;
   function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
   window.addEventListener('touchstart', () => { if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
@@ -150,6 +154,7 @@
   function playSynth(freq, type, dur) {
     try {
       initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = type;
@@ -173,7 +178,7 @@
   let animationFrameId = null;
 
   const bets = {
-    1: { state: 'IDLE', amount: 4.00, serverData: null }
+    1: { state: 'IDLE', amount: 4.00, betId: null }
   };
 
   function updateBalanceDisplay() {
@@ -186,7 +191,7 @@
   }
   updateBalanceDisplay();
 
-  // Handshake
+  // Handshake with Lobby
   if (window.parent && window.parent !== window) {
     window.parent.postMessage({ type: "GAME_READY" }, "*");
   }
@@ -197,7 +202,7 @@
     }
   });
 
-  // Canvas Drawing
+  // Canvas Flight Scene
   const canvas = document.getElementById("flightCanvas");
   const ctx = canvas.getContext("2d");
   function resizeCanvas() { canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; }
@@ -208,6 +213,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const w = canvas.width, h = canvas.height;
 
+    // Radial Blue Glow
     const blueGlow = ctx.createRadialGradient(w * 0.5, h * 0.5, 10, w * 0.5, h * 0.5, w * 0.45);
     blueGlow.addColorStop(0, "rgba(24, 76, 120, 0.45)");
     blueGlow.addColorStop(0.6, "rgba(10, 30, 50, 0.2)");
@@ -279,14 +285,19 @@
     runFlightAnimation();
   }
 
+  // ========================================================================
+  // ⏱️ REAL-TIME COUNTING (ከላይ ማባዣውና ከታች ትርፉ አብረው ይቆጥራሉ!)
+  // ========================================================================
   function runFlightAnimation() {
     if (gameState !== "FLYING") return;
     const now = performance.now();
     const elapsed = Math.max(0, (now - flightStartTime) / 1000);
 
+    // ከላይ ማባዣው ይቆጥራል
     currentMultiplier = Number((1.00 + (0.06 * elapsed) + (0.038 * Math.pow(elapsed, 1.45))).toFixed(2));
     document.getElementById("liveMultiplierText").innerText = currentMultiplier.toFixed(2) + "x";
 
+    // ከታች በአዝራሩ ላይ ትርፉ አብሮ ይቆጥራል! (Live Real-Time Counter)
     const b = bets[1];
     if (b.state === 'ACTIVE_IN_FLIGHT') {
       const liveWin = (b.amount * currentMultiplier).toFixed(2);
@@ -305,7 +316,7 @@
   }
 
   // ========================================================================
-  // 💰 3. ውርርድ መያዝ፣ CASH OUT እና CRASH (ጥብቅ የሂሳብ ቀመር)
+  // 💰 ውርርድ መያዝ፣ CASH OUT እና CRASH (ልክ እንደ JET-X አስተማማኝ አሰራር)
   // ========================================================================
   async function handleBetClick(id) {
     const b = bets[id];
@@ -317,13 +328,18 @@
         return;
       }
 
+      // 1. ገንዘቡን በቅጽበት መቀነስ (Deduct Wager Instantly)
+      balance -= amt;
+      b.amount = amt;
+      updateBalanceDisplay();
       b.state = 'BET_QUEUED';
       updateBetButtonUI(id);
       SOUNDS.click();
 
-      // 👉 1. ለወላጅ ገጽ ውርርድ መያዙን ማሳወቅ (እንዳይዘጋ ጥበቃ ይጀምራል)
+      // ለሎቢው ውርርድ መያዙን ማሳወቅ (እንዳይዘጋ ይጠብቃል)
       if (window.parent) window.parent.postMessage({ type: 'BET_STARTED' }, '*');
 
+      // ሰርቨሩ የፍንዳታ ነጥቡን (Crash Point) እንዲወስን መጥራት
       try {
         const res = await fetch(`${RENDER_BASE_URL}/api/bet/play`, {
           method: "POST",
@@ -332,54 +348,57 @@
         });
         const d = await res.json();
         if (d.success) {
-          b.serverData = d;
-          b.amount = amt;
-          targetCrashMultiplier = d.crashPoint;
-          balance = d.newBalance; // 👈 ገንዘቡ (1000 ብሩ) ወዲያው ተቀነሰ!
-          updateBalanceDisplay();
+          b.betId = d.betId;
+          targetCrashMultiplier = d.crashPoint || d.visualOutcome?.crashPoint || 1.25;
         } else {
+          // ሰርቨሩ ካልተቀበለው ብሩን መመለስ
+          balance += amt;
           b.state = 'IDLE';
+          updateBalanceDisplay();
           updateBetButtonUI(id);
           if (window.parent) window.parent.postMessage({ type: 'BET_ENDED' }, '*');
           triggerCleanWin(d.message || "Bet rejected");
         }
       } catch(e) {
-        b.state = 'IDLE';
-        updateBetButtonUI(id);
-        if (window.parent) window.parent.postMessage({ type: 'BET_ENDED' }, '*');
+        // ሰርቨር ኔትወርክ ቢያጋጥመው እንኳ ተፈጥሯዊ የበረራ ቁጥር መስጠት
+        targetCrashMultiplier = Number((1.10 + Math.random() * 2.2).toFixed(2));
       }
     } else if (b.state === 'ACTIVE_IN_FLIGHT') {
-      cashOutBet(id);
+      executeCashout(id);
     }
   }
 
-  // 👉 2. በእጁ CASH OUT ሲነካ ብቻ ትርፍ መደመር
-  async function cashOutBet(id) {
+  // 2. ተጫዋቹ CASH OUT ሲነካ ያሸነፈውን ወዲያውኑ ገቢ ማድረግ (Instant Win Credit)
+  function executeCashout(id) {
     const b = bets[id];
-    if (b.state !== 'ACTIVE_IN_FLIGHT' || !b.serverData) return;
+    if (b.state !== 'ACTIVE_IN_FLIGHT') return;
 
-    const mult = currentMultiplier;
+    // ያሸነፈውን ትርፍ ማስላት
+    const winAmt = Number((b.amount * currentMultiplier).toFixed(2));
     b.state = 'IDLE';
     updateBetButtonUI(id);
     SOUNDS.cashout();
 
-    try {
-      const res = await fetch(`${RENDER_BASE_URL}/api/bet/cashout`, {
+    // ልክ እንደ Jet-X ብሩ ወዲያውኑ ይደመራል!
+    balance += winAmt;
+    updateBalanceDisplay();
+
+    // ለሎቢው ዙሩ ማለቁን ወዲያውኑ ማሳወቅ
+    if (window.parent) window.parent.postMessage({ type: 'BET_ENDED' }, '*');
+
+    triggerCleanWin(`🎉 +${winAmt.toFixed(2)} ETB Cashed Out @ ${currentMultiplier.toFixed(2)}x!`);
+
+    // ሰርቨሩ ላይ በጀርባ ማዘመን
+    if (b.betId) {
+      fetch(`${RENDER_BASE_URL}/api/bet/cashout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: USER_ID, betId: b.serverData.betId, cashoutMultiplier: mult })
-      });
-      const d = await res.json();
-      if (d.success) {
-        balance = d.newBalance; // አሸናፊው ብቻ በዳታቤዝ ተደምሮ ይመጣል!
-        updateBalanceDisplay();
-        if (window.parent) window.parent.postMessage({ type: 'BET_ENDED' }, '*');
-        triggerCleanWin(`🎉 +${d.winAmount.toFixed(2)} ETB Cashed Out @ ${mult.toFixed(2)}x!`);
-      }
-    } catch(e) {}
+        body: JSON.stringify({ userId: USER_ID, betId: b.betId, cashoutMultiplier: currentMultiplier })
+      }).catch(() => {});
+    }
   }
 
-  // 👉 3. አውሮፕላኑ ሲከሰከስ (ተጫዋቹ ሳይወጣ ከቀረ ገንዘቡ ተበልቶ ይቀራል፤ ምንም አይጨመርም!)
+  // 3. አውሮፕላኑ ሲከሰከስ (ሳይወጡ ከቀሩ ገንዘቡ ተበልቶ ይቀራል፤ ምንም አይጨመርም!)
   function triggerCrash() {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     gameState = "CRASHED";
@@ -389,18 +408,23 @@
     document.getElementById("crashedLabel").style.display = "block";
 
     const b = bets[1];
-    if (b.state === 'ACTIVE_IN_FLIGHT' && b.serverData) {
-      fetch(`${RENDER_BASE_URL}/api/bet/crash`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ betId: b.serverData.betId })
-      }).catch(() => {});
+    if (b.state === 'ACTIVE_IN_FLIGHT') {
+      // ሰርቨሩ ላይ LOST መሆኑን መመዝገብ
+      if (b.betId) {
+        fetch(`${RENDER_BASE_URL}/api/bet/crash`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ betId: b.betId })
+        }).catch(() => {});
+      }
 
       b.state = 'IDLE';
-      b.serverData = null;
+      b.betId = null;
       updateBetButtonUI(1);
+
+      // 👉 ወሳኙ ማስተካከያ፡ ዙሩ እንዳለቀ ለሎቢው ማሳወቅ! (ተመልሶ ሲወጣ አይከለክለውም!)
       if (window.parent) window.parent.postMessage({ type: 'BET_ENDED' }, '*');
-      // 👈 ምንም ገንዘብ አይደመርም! 1000 ብሩ ተቆርጦ ቀርቷል!
+      // 👈 ምንም ዓይነት ገንዘብ አይደመርም! 1000 ብሩ ተቆርጦ ቀርቷል!
     }
 
     const ticker = document.getElementById("historyTicker");

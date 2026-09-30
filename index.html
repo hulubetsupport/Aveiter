@@ -3,1935 +3,1739 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Fast Keno - Hulu Bet</title>
+  <title>Aviator - Spribe Official Edition</title>
   <style>
     :root {
-      --bg-dark: #12181c;
-      --bg-surface: #172127;
-      --bg-panel: #1e2a32;
-      --border-panel: #2a3a45;
-      --border-light: rgba(255, 255, 255, 0.06);
-      --accent-green: #23784c;
-      --accent-green-bright: #3de089;
-      --accent-cyan: #00e5ff;
-      --accent-gold: #f5b041;
+      --bg-black: #000000;
+      --panel-bg: #141518;
+      --card-bg: #1b1c20;
+      --border-dark: #24262e;
+      --spribe-red: #e50914;
+      --spribe-green: #28a745;
+      --spribe-orange: #ff7700;
+      --pill-blue: #38bdf8;
+      --pill-purple: #9b59b6;
+      --pill-magenta: #e879f9;
+      --text-dim: #7d8494;
       --text-white: #ffffff;
-      --text-muted: #8397a4;
-      --dot-red: #ff4757;
-      --dot-blue: #1e90ff;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; height: 100%; background: #000; color: #fff; overflow: hidden; }
 
-    html, body {
+    /* Master Responsive Flex Layout */
+    .aviator-wrapper {
       width: 100%;
-      min-height: 100vh;
-      background: var(--bg-dark);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    .keno-wrapper {
-      width: 100%;
-      max-width: 100%;
-      min-height: 100vh;
-      background: var(--bg-dark);
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      background: #000;
       position: relative;
-      padding-bottom: 30px;
     }
 
-    .main-content-limiter {
-      width: 100%;
-      max-width: 720px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* 1. Header Bar */
-    header.brand-bar {
+    /* Sub Brand Header */
+    .brand-header {
+      height: 38px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-panel);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      width: 100%;
-    }
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      padding: 0 12px;
+      background: #000;
+      z-index: 25;
+      flex-shrink: 0;
+      border-bottom: 1px solid #14151a;
     }
     .brand-logo {
-      font-size: 18px;
-      font-weight: 900;
-      font-style: italic;
-      line-height: 1;
-      letter-spacing: -0.5px;
-    }
-    .brand-logo .fast { color: #fff; }
-    .brand-logo .keno { color: var(--accent-green-bright); }
-
-    .header-pill {
-      background: #0d1317;
-      border: 1px solid var(--border-panel);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      padding: 4px 12px;
-      font-size: 12px;
-      gap: 8px;
-    }
-    .balance-val {
-      color: #ffe600;
-      font-weight: 800;
-    }
-    .pill-divider {
-      width: 1px;
-      height: 12px;
-      background: var(--border-panel);
-    }
-    .round-id {
-      color: var(--text-muted);
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .verified-icon {
-      width: 13px;
-      height: 13px;
-      fill: var(--accent-green-bright);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .icon-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px;
-    }
-    .icon-btn svg {
-      width: 19px;
-      height: 19px;
-      fill: currentColor;
-    }
-
-    /* 2. Sonar Radar Arena */
-    .radar-arena {
-      background: radial-gradient(circle at center, #1b2d35 0%, #131d22 65%, var(--bg-dark) 100%);
-      padding: 12px 16px;
-      position: relative;
-      border-bottom: 1px solid var(--border-panel);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 146px;
-      justify-content: center;
-      overflow: hidden;
-      width: 100%;
-    }
-    .sonar-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px dashed rgba(0, 229, 255, 0.12);
-      pointer-events: none;
-    }
-    .r1 { width: 90px; height: 90px; }
-    .r2 { width: 170px; height: 170px; }
-    .r3 { width: 260px; height: 260px; }
-
-    .radar-top-row {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      position: absolute;
-      top: 8px;
-      padding: 0 16px;
-      z-index: 3;
-    }
-    .rule-pill {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .rule-badge {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #152026;
-      border: 1px solid var(--border-panel);
-      font-size: 10px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #cbd5e1;
-    }
-    .rule-badge.blue {
-      background: #007799;
-      color: #fff;
-    }
-    .radar-timer {
       font-size: 20px;
       font-weight: 900;
-      color: var(--accent-cyan);
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+      font-style: italic;
+      color: var(--spribe-red);
+      letter-spacing: -0.5px;
     }
-    .radar-timer.live {
-      color: #ff4757;
-      animation: blink 0.8s infinite;
-    }
-
-    /* Selection View */
-    .selection-view {
+    .brand-right {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      width: 100%;
-      z-index: 2;
+      gap: 12px;
     }
-    .choose-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: #fff;
-    }
-    .choose-sub {
+    .live-balance-tag {
+      color: var(--spribe-green);
       font-size: 13px;
-      font-weight: 700;
-      color: var(--accent-green-bright);
-      margin-top: 2px;
-    }
-    .possible-win-view {
-      display: none;
-      width: 100%;
-      padding: 0 8px;
-    }
-    .possible-win-header {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-    .possible-win-header span {
-      color: var(--accent-green-bright);
-      font-size: 15px;
-    }
-    .odds-row {
-      display: flex;
-      gap: 10px;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-    .odds-row .hl { color: #fff; font-weight: 700; }
-
-    .selected-rack {
-      display: flex;
-      gap: 4px;
-      justify-content: flex-start;
-      overflow-x: auto;
-      scrollbar-width: none;
-      width: 100%;
-    }
-    .selected-rack::-webkit-scrollbar { display: none; }
-    .rack-slot {
-      min-width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px dashed var(--border-panel);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .rack-slot.filled {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-panel);
-    }
-
-    /* 3D Live Draw View */
-    .draw-view {
-      display: none;
-      width: 100%;
-      flex-direction: column;
-      align-items: center;
-      z-index: 2;
-      padding: 10px 0;
-    }
-    .big-3d-ball {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #5ce1e6 0%, #0d47a1 65%, #001933 100%);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), inset 0 2px 6px rgba(255, 255, 255, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
       font-weight: 900;
-      color: #fff;
-      margin-bottom: 10px;
-      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-family: monospace;
     }
-    .drawn-tray {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 4px;
-      padding: 0 6px;
-      max-width: 480px;
-    }
-    .mini-ball {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #3a7bd5 0%, #16365c 65%, #0d1e33 100%);
-      font-size: 10px;
-      font-weight: 800;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
-      animation: popIn 0.3s ease;
-    }
-    .mini-ball.hit {
-      background: radial-gradient(circle at 35% 30%, #69f0ae 0%, #23784c 70%, #0a2e1b 100%);
-      color: #fff;
-      font-weight: 900;
-      box-shadow: 0 0 10px var(--accent-green-bright);
-    }
-
-    /* 3. Fluid 80 Grid */
-    .grid-section {
-      padding: 8px 12px;
-      width: 100%;
-    }
-    .keno-grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: clamp(3px, 1vw, 6px);
-      width: 100%;
-    }
-    .grid-cell {
-      background: #172127;
-      border: 1px solid var(--border-panel);
-      height: clamp(34px, 7vw, 48px);
-      border-radius: 4px;
-      font-size: clamp(12px, 2.5vw, 15px);
-      font-weight: 700;
-      color: #9cb1c1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .menu-btn-icon {
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #888;
       position: relative;
-      transition: transform 0.05s, background 0.1s;
     }
-    .grid-cell:active { transform: scale(0.94); }
-    .grid-cell.selected {
-      background: var(--accent-green);
-      color: #fff;
-      font-weight: 900;
-      border-color: var(--accent-green-bright);
-      box-shadow: inset 0 0 8px rgba(61, 224, 137, 0.7);
-    }
-    .cell-dot {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      top: 3px;
-    }
-    .dot-hot { right: 3px; background: var(--dot-red); box-shadow: 0 0 4px var(--dot-red); }
-    .dot-cold { left: 3px; background: var(--dot-blue); box-shadow: 0 0 4px var(--dot-blue); }
 
-    /* 4. Controls */
-    .controls-wrapper {
-      padding: 0 12px;
-      width: 100%;
-    }
-    .bet-stepper {
+    /* Multiplier History Pill Ticker */
+    .history-ticker-wrap {
+      height: 30px;
       display: flex;
       align-items: center;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-panel);
-      border-radius: 4px;
-      margin-bottom: 6px;
-      overflow: hidden;
-      width: 100%;
-    }
-    .ctrl-step-btn {
-      width: 44px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 19px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .ctrl-step-btn:active { background: rgba(255, 255, 255, 0.05); }
-    .bet-amt-val {
-      flex: 1;
-      text-align: center;
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
-    }
-    .quick-chips {
-      display: flex;
-      border-left: 1px solid var(--border-panel);
-    }
-    .quick-chip {
-      background: var(--bg-panel);
-      border: none;
-      border-right: 1px solid var(--border-panel);
-      color: var(--accent-green-bright);
-      font-size: 11px;
-      font-weight: 800;
-      padding: 0 12px;
-      height: 40px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .quick-chip:last-child { border-right: none; color: var(--text-muted); }
-    .quick-chip:active { background: rgba(255, 255, 255, 0.08); }
-
-    .main-bet-btn {
-      width: 100%;
-      height: 46px;
-      background: linear-gradient(180deg, #24754a 0%, #1b5938 100%);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      border: 1px solid #3de089;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-      transition: filter 0.15s;
-    }
-    .main-bet-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      filter: grayscale(0.5);
-    }
-    .main-bet-btn.accepted {
-      background: #17422b;
-      border-color: #27a863;
-    }
-    .main-bet-btn svg { width: 18px; height: 18px; fill: #fff; }
-
-    /* 5. Navigation Tabs */
-    .tabs-bar {
-      display: flex;
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border-panel);
-      border-bottom: 1px solid var(--border-panel);
-      margin-top: 12px;
-      width: 100%;
-    }
-    .tab-item {
-      flex: 1;
-      padding: 10px 0;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--text-muted);
-      cursor: pointer;
-      text-transform: uppercase;
-      border-bottom: 2px solid transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-    .tab-item.active {
-      color: var(--accent-green-bright);
-      border-bottom-color: var(--accent-green-bright);
-      background: rgba(35, 120, 76, 0.15);
-    }
-    .tab-item svg { width: 13px; height: 13px; fill: currentColor; }
-
-    /* Tab Contents */
-    .subview {
-      display: none;
-      padding: 10px 12px;
-      width: 100%;
-    }
-    .subview.active { display: block; }
-
-    .feed-counts-line {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      padding: 0 2px;
-    }
-    .feed-counts-line strong { color: var(--accent-green-bright); }
-
-    .ticket-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      width: 100%;
-    }
-    .ticket-row {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-panel);
-      border-radius: 4px;
-      padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .ticket-row.user-ticket {
-      border-color: var(--accent-green-bright);
-      background: #172a22;
-    }
-    .ticket-user-line {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      font-weight: bold;
-      color: var(--accent-green-bright);
-    }
-    .ticket-numbers-grid {
-      display: flex;
-      gap: 4px;
+      gap: 5px;
+      padding: 0 8px;
+      background: #08090b;
       overflow-x: auto;
       scrollbar-width: none;
-    }
-    .ticket-numbers-grid::-webkit-scrollbar { display: none; }
-    .ticket-slot {
-      width: 28px;
-      height: 26px;
-      background: #141c22;
-      border-radius: 3px;
-      font-size: 11px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
+      border-bottom: 1px solid #14161a;
       flex-shrink: 0;
     }
-    .ticket-slot.empty { background: #10161a; }
-    .ticket-slot.hit {
-      background: var(--accent-green) !important;
-      color: #fff !important;
-      font-weight: 900;
-    }
-    .ticket-bottom-line {
-      display: flex;
-      justify-content: space-between;
+    .history-ticker-wrap::-webkit-scrollbar { display: none; }
+    .mult-pill {
       font-size: 11px;
-      color: var(--text-muted);
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 10px;
+      white-space: nowrap;
+      cursor: pointer;
     }
-    .status-waiting { color: var(--accent-gold); font-weight: bold; }
-    .status-won { color: var(--accent-green-bright); font-weight: 900; }
-    .status-lost { color: #8899a6; }
+    .pill-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .pill-purple { background: rgba(155, 89, 182, 0.15); color: #9b59b6; }
+    .pill-magenta { background: rgba(232, 121, 249, 0.2); color: #e879f9; }
+    .history-more-btn {
+      margin-left: auto;
+      padding: 2px 6px;
+      background: #1c1f26;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 900;
+      color: #888;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
 
-    /* Results Row */
-    .result-row-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-panel);
-      border-radius: 4px;
-      padding: 8px 10px;
-      margin-bottom: 6px;
-      display: flex;
-      gap: 10px;
-    }
-    .res-draw-col {
-      width: 90px;
-      border-right: 1px solid var(--border-panel);
+    /* Main Responsive Split Grid (Mobile: Stacked | Tablet/PC: Side-by-Side) */
+    .main-game-layout {
+      flex: 1;
       display: flex;
       flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .game-arena-column {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 860px) {
+      .main-game-layout {
+        flex-direction: row;
+      }
+      .game-arena-column {
+        flex: 1.4;
+        height: 100%;
+        overflow-y: auto;
+      }
+      .flight-arena {
+        height: 380px !important;
+      }
+      .bet-panels-row {
+        flex-direction: row !important;
+      }
+      .bet-panel {
+        flex: 1;
+      }
+      .live-bets-section {
+        flex: 1;
+        height: 100%;
+        border-left: 1px solid var(--border-dark);
+      }
+    }
+
+    @media (min-width: 580px) and (max-width: 859px) {
+      .flight-arena {
+        height: 270px !important;
+      }
+      .bet-panels-row {
+        flex-direction: row !important;
+      }
+      .bet-panel {
+        flex: 1;
+      }
+    }
+
+    /* Flight Arena Canvas */
+    .flight-arena {
+      width: 100%;
+      height: 215px;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    #flightCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Multiplier HUD */
+    .multiplier-hud {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
+      pointer-events: none;
+      z-index: 5;
     }
-    .res-balls-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 3px;
+    .hud-mult-val {
+      font-size: 52px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 25px rgba(255,255,255,0.25);
+      letter-spacing: -1px;
     }
-    .res-mini-ball {
-      background: #141d24;
-      text-align: center;
+    .hud-mult-val.crashed {
+      color: var(--spribe-red);
+    }
+    .hud-crashed-lbl {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--spribe-red);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 2px;
+      display: none;
+    }
+
+    /* Spribe UFC Official Partner Waiting Banner (Screenshot 7) */
+    .waiting-banner {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, #1b0712 0%, #000000 85%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 6;
+    }
+    .ufc-logo { font-size: 22px; font-weight: 900; color: #fff; font-style: italic; }
+    .ufc-logo span { color: var(--spribe-red); }
+    .spribe-verified-box {
+      margin-top: 8px;
+      background: #131417;
+      border: 1px solid #23252b;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px;
+      color: var(--spribe-green);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .waiting-progress-track {
+      width: 130px;
+      height: 3px;
+      background: #222;
       border-radius: 2px;
-      padding: 3px 0;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .waiting-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--spribe-red);
+      transition: width 0.1s linear;
+    }
+    .waiting-title-text {
       font-size: 10px;
       font-weight: bold;
-      color: #cbd5e1;
+      color: var(--spribe-orange);
+      margin-top: 5px;
     }
 
-    /* Statistics */
-    .stats-scroll-list {
-      max-height: 450px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-      font-size: 11px;
-    }
-    .stat-num { width: 22px; text-align: right; color: var(--text-muted); font-weight: bold; }
-    .stat-bar-outer {
-      flex: 1;
-      height: 6px;
-      background: var(--border-panel);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .stat-bar-fill { height: 100%; background: var(--accent-green-bright); }
-    .stat-count { width: 24px; color: var(--text-muted); font-size: 10px; }
-
-    /* Leaders */
-    .table-leaders {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    .table-leaders th {
-      text-align: left;
-      color: var(--text-muted);
-      padding: 8px 6px;
-      border-bottom: 1px solid var(--border-panel);
-    }
-    .table-leaders td {
-      padding: 8px 6px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    /* Simple Toast: "won 25" style */
-    .toast-overlay {
-      position: fixed;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 440px;
-      z-index: 1000;
-      display: none;
-      animation: slideDown 0.25s ease-out;
-    }
-    .toast-box {
-      border-radius: 6px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    }
-    .toast-box.error {
-      background: #471919;
-      border: 1px solid #732626;
-      color: #ffd8d8;
-    }
-    .toast-box.success {
-      background: #143825;
-      border: 1px solid #23633e;
-      color: #d2ffe2;
-    }
-    .toast-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .toast-close {
-      background: transparent;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-
-    /* Rules Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-    }
-    .modal-container {
-      width: 100%;
-      max-width: 480px;
-      max-height: 85vh;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-panel);
-      border-radius: 8px;
+    /* Dual Bet Panels */
+    .bet-panels-row {
+      padding: 5px 8px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      gap: 5px;
+      background: #000;
+      flex-shrink: 0;
     }
-    .modal-header {
+    .bet-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+    .panel-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border-panel);
     }
-    .modal-nav { display: flex; gap: 6px; }
-    .modal-nav-btn {
-      background: var(--bg-panel);
+    .mode-pills-wrap {
+      display: flex;
+      background: #000;
+      border-radius: 20px;
+      padding: 2px;
+      margin: 0 auto;
+    }
+    .mode-pill-btn {
+      background: none;
       border: none;
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 4px;
+      color: #888;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
+      padding: 2px 14px;
+      border-radius: 14px;
       cursor: pointer;
     }
-    .modal-nav-btn.active {
-      background: var(--accent-green);
+    .mode-pill-btn.active {
+      background: #23252b;
       color: #fff;
     }
-    .modal-body {
-      padding: 14px;
-      overflow-y: auto;
+    .collapse-toggle-btn {
+      background: #202227;
+      border: none;
+      color: #888;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
       font-size: 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: 10px;
+      top: 8px;
     }
-    .paytable-grid-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 8px;
-      font-size: 10px;
+
+    .panel-controls-grid {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .stepper-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stepper-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #000;
+      border: 1px solid #282a32;
+      border-radius: 20px;
+      padding: 2px 6px;
+    }
+    .step-math-btn {
+      background: #23252b;
+      border: none;
+      color: #aaa;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bet-val-input {
+      width: 55px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      text-align: center;
+      outline: none;
+    }
+    .chips-2x2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+    .quick-chip {
+      background: #1c1e24;
+      border: 1px solid #282b34;
+      color: #cbd5e1;
+      border-radius: 5px;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 3px 0;
+      cursor: pointer;
       text-align: center;
     }
-    .paytable-grid-table th, .paytable-grid-table td {
-      border: 1px solid var(--border-panel);
-      padding: 5px 2px;
-    }
-    .paytable-grid-table th { background: #131f24; color: var(--accent-green-bright); }
 
-    @keyframes popIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes slideDown { 0% { transform: translate(-50%, -15px); opacity: 0; } 100% { transform: translate(-50%, 0); opacity: 1; } }
-    @keyframes blink { 50% { opacity: 0.3; } }
+    /* Bet Big Action Button */
+    .action-bet-btn {
+      flex: 1.25;
+      height: 58px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: transform 0.1s ease;
+    }
+    .action-bet-btn:active { transform: scale(0.97); }
+    .btn-state-bet { background: var(--spribe-green); color: #fff; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); }
+    .btn-state-cancel { background: var(--spribe-orange); color: #fff; }
+    .btn-state-cashout { background: var(--spribe-orange); color: #fff; box-shadow: 0 4px 15px rgba(255, 119, 0, 0.4); }
+    .btn-state-waiting { background: #3b220c; color: #ff9800; border: 1px dashed #ff9800; }
+    .action-bet-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-main-title { font-size: 15px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+    .btn-sub-title { font-size: 13px; font-weight: 800; margin-top: 1px; }
+
+    .auto-config-row {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #202228;
+      padding-top: 4px;
+      font-size: 10.5px;
+      color: #888;
+    }
+    .auto-config-row.open { display: flex; }
+    .auto-mult-input {
+      width: 45px;
+      background: #000;
+      border: 1px solid #2c2f38;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-align: center;
+      padding: 2px 0;
+      outline: none;
+    }
+
+    /* Live Bets Section (All Bets, Previous, Top) */
+    .live-bets-section {
+      flex: 1;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      background: #000;
+    }
+    .bets-tabs-header {
+      display: flex;
+      background: #121316;
+      border-radius: 20px;
+      padding: 2px;
+      margin: 4px 8px;
+      flex-shrink: 0;
+    }
+    .b-tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 4px 0;
+      font-size: 11px;
+      font-weight: 800;
+      color: #888;
+      cursor: pointer;
+      border-radius: 16px;
+    }
+    .b-tab-btn.active {
+      background: #23252b;
+      color: #fff;
+    }
+
+    /* Sub Filters for Top Tab (Screenshot 4) */
+    .top-subfilters {
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      padding: 2px 8px;
+    }
+    .filter-btn-group {
+      display: flex;
+      gap: 4px;
+    }
+    .subfilter-btn {
+      flex: 1;
+      background: #16181d;
+      border: 1px solid #262932;
+      color: #888;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .subfilter-btn.active {
+      background: #23252b;
+      color: #fff;
+      border-color: #3b3f4d;
+    }
+
+    .bets-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 12px;
+      flex-shrink: 0;
+    }
+    .bets-count-text { font-size: 11px; font-weight: 800; color: #fff; }
+    .total-win-block { text-align: right; }
+    .total-win-sum { font-size: 13px; font-weight: 900; color: var(--spribe-green); }
+
+    /* Previous Round Highlight Header (Screenshot 1 & 5) */
+    .prev-round-banner {
+      display: none;
+      background: #121316;
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin: 2px 8px 4px;
+      border: 1px solid #23262e;
+    }
+    .prev-result-lbl { font-size: 10px; color: #888; font-weight: bold; }
+    .prev-result-mult { font-size: 16px; font-weight: 900; color: #38bdf8; }
+
+    .table-col-labels {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 14px;
+      font-size: 9.5px;
+      font-weight: bold;
+      color: #64748b;
+    }
+    .bets-scroll-list {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 2px 8px;
+    }
+    .bet-row-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #121316;
+      border-radius: 14px;
+      padding: 5px 12px;
+      margin-bottom: 3px;
+      font-size: 10.5px;
+      font-weight: bold;
+    }
+    .bet-row-item.cashed {
+      background: rgba(40, 167, 69, 0.12);
+      border: 1px solid rgba(40, 167, 69, 0.35);
+    }
+    .player-col { display: flex; align-items: center; gap: 6px; width: 90px; color: #ddd; }
+    .avatar-icon-svg { width: 16px; height: 16px; border-radius: 50%; fill: #64748b; flex-shrink: 0; }
+    .bet-amt-col { color: #aaa; width: 65px; text-align: right; }
+    .mult-col { width: 45px; text-align: center; color: var(--pill-blue); }
+    .win-amt-col { width: 75px; text-align: right; color: var(--spribe-green); font-weight: 900; }
+
+    /* Side Settings Drawer (Screenshot 2) */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      justify-content: flex-end;
+    }
+    .sidebar-menu {
+      width: 275px;
+      height: 100%;
+      background: #18191d;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      border-left: 1px solid var(--border-dark);
+      gap: 3px;
+    }
+    .menu-user-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #23252c;
+      margin-bottom: 4px;
+    }
+    .user-profile-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 900; }
+    .menu-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      font-size: 11.5px;
+      font-weight: bold;
+      color: #ccc;
+      border-bottom: 1px solid #202227;
+      cursor: pointer;
+    }
+    .menu-item-left { display: flex; align-items: center; gap: 8px; }
+    .menu-svg-icon { width: 14px; height: 14px; stroke: #94a3b8; stroke-width: 2; fill: none; }
+    
+    .switch { position: relative; display: inline-block; width: 30px; height: 16px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; border-radius: 16px; transition: .2s; }
+    .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .2s; }
+    input:checked + .slider { background-color: var(--spribe-green); }
+    input:checked + .slider:before { transform: translateX(14px); }
+
+    /* Round History Modal (Screenshot 3) */
+    .history-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 250;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .history-modal-card {
+      background: #16181d;
+      border: 1px solid var(--border-dark);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+    }
+    .history-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #242730;
+      padding-bottom: 8px;
+    }
+    .history-grid-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 6px;
+      overflow-y: auto;
+    }
+
+    /* Red Pill Toast Notifications (Screenshot 2) */
+    .toast-container {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .toast-bubble {
+      background: #500f16;
+      border: 1px solid #991b1b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      animation: fadeInToast 0.2s ease-out;
+    }
+    @keyframes fadeInToast { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-<div class="keno-wrapper">
+<div class="aviator-wrapper">
+  <div class="toast-container" id="toastContainer"></div>
 
-  <!-- SIMPLE TOAST -->
-  <div class="toast-overlay" id="toast-overlay">
-    <div class="toast-box" id="toast-box">
-      <div class="toast-content">
-        <svg id="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"></svg>
-        <span id="toast-message">won 25</span>
+  <!-- Sub Brand & Balance Bar (No Extra Lobby/Deposit Header) -->
+  <header class="brand-header">
+    <div class="brand-logo">Aviator</div>
+    <div class="brand-right">
+      <span class="live-balance-tag"><span id="lblUserBalance">0.00</span> ETB</span>
+      <div class="menu-btn-icon" onclick="toggleSidebar(true)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </div>
-      <button class="toast-close" onclick="hideToast()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- 1. Header Bar -->
-  <header class="brand-bar">
-    <div class="brand-group">
-      <button class="icon-btn" onclick="exitToLobby()" title="Back to Lobby">
-        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-      </button>
-      <div class="brand-logo">
-        <span class="fast">FAST</span><span class="keno">KENO</span>
-      </div>
-    </div>
-
-    <div class="header-pill">
-      <span class="balance-val"><span id="lbl-balance">0.00</span> ETB</span>
-      <div class="pill-divider"></div>
-      <span class="round-id">
-        <span>ID:</span>
-        <strong id="lbl-round-id" style="color:#fff;">45556</strong>
-        <svg class="verified-icon" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-      </span>
-    </div>
-
-    <div class="header-actions">
-      <button class="icon-btn" onclick="openRulesModal()" title="Rules & Paytable">
-        <svg viewBox="0 0 24 24"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
-      </button>
-      <button class="icon-btn" onclick="toggleAudio()" title="Sound Toggle" id="btn-sound">
-        <svg id="svg-sound-muted" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/></svg>
-      </button>
     </div>
   </header>
 
-  <div class="main-content-limiter">
-
-    <!-- 2. Sonar Radar Arena -->
-    <section class="radar-arena">
-      <div class="sonar-ring r1"></div>
-      <div class="sonar-ring r2"></div>
-      <div class="sonar-ring r3"></div>
-
-      <div class="radar-top-row">
-        <div class="rule-pill">
-          <div class="rule-badge">80</div>
-          <div class="rule-badge blue">10</div>
-        </div>
-        <div class="radar-timer" id="stage-timer">00:54</div>
-        <div class="rule-pill" style="cursor:pointer;" onclick="openRulesModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-      </div>
-
-      <!-- PICK ARENA VIEW -->
-      <div class="selection-view" id="selection-view">
-        <div id="default-banner" style="text-align:center;">
-          <div class="choose-title">Choose 10 numbers</div>
-          <div class="choose-sub">From 1 to 80</div>
-        </div>
-
-        <div class="possible-win-view" id="possible-win-view">
-          <div class="possible-win-header">Possible win <span id="lbl-possible-win">0</span> ETB</div>
-          <div class="odds-row" id="odds-row-container"></div>
-          <div class="selected-rack" id="selected-rack"></div>
-        </div>
-      </div>
-
-      <!-- 3D LIVE DRAW ARENA VIEW -->
-      <div class="draw-view" id="draw-view">
-        <div class="big-3d-ball" id="current-drawn-ball">?</div>
-        <div class="drawn-tray" id="drawn-tray"></div>
-      </div>
-    </section>
-
-    <!-- 3. Fluid 80 Grid -->
-    <section class="grid-section" id="grid-container-section">
-      <div class="keno-grid" id="keno-grid"></div>
-    </section>
-
-    <!-- 4. Controls -->
-    <section class="controls-wrapper" id="controls-section">
-      <div class="bet-stepper">
-        <button class="ctrl-step-btn" onclick="adjustBet(-1)">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13H5v-2h14v2z"/></svg>
-        </button>
-        <div class="bet-amt-val" id="lbl-bet-amount">4.00</div>
-        <button class="ctrl-step-btn" onclick="adjustBet(1)">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-        </button>
-        <div class="quick-chips">
-          <button class="quick-chip" onclick="multiplyBet(2)">X2</button>
-          <button class="quick-chip" onclick="setMaxBet()">MAX</button>
-          <button class="quick-chip" onclick="autoPick(5)" title="Auto Pick 5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-          </button>
-          <button class="quick-chip" onclick="clearPicks()" title="Clear Selection">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <button class="main-bet-btn" id="btn-bet" onclick="placeKenoTicket()">
-        <span id="btn-bet-label">BET</span>
-      </button>
-    </section>
-
-    <!-- 5. Navigation Tabs -->
-    <nav class="tabs-bar">
-      <div class="tab-item active" onclick="switchTab('game', this)">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <span>GAME</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('history', this)">
-        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-        <span>HISTORY</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('results', this)">
-        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <span>RESULTS</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('statistics', this)">
-        <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
-        <span>STATISTICS</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('leaders', this)">
-        <svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/></svg>
-        <span>LEADERS</span>
-      </div>
-    </nav>
-
-    <!-- SUBVIEW: GAME -->
-    <section class="subview active" id="view-game">
-      <div class="feed-counts-line">
-        <span>All <strong id="lbl-all-count">42</strong></span>
-        <span>My Tickets <strong id="lbl-my-tickets-count">0</strong>/10</span>
-        <span>My Bets <strong id="lbl-my-bets-total">0</strong> ETB</span>
-      </div>
-
-      <!-- Active Tickets Feed -->
-      <div class="ticket-list" id="my-tickets-container"></div>
-      <div class="ticket-list" id="live-dynamic-tickets-container" style="margin-top: 6px;"></div>
-    </section>
-
-    <!-- SUBVIEW: HISTORY -->
-    <section class="subview" id="view-history">
-      <div class="ticket-list" id="history-container">
-        <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:20px;">No betting history found</div>
-      </div>
-    </section>
-
-    <!-- SUBVIEW: RESULTS -->
-    <section class="subview" id="view-results">
-      <div class="ticket-list" id="results-container"></div>
-    </section>
-
-    <!-- SUBVIEW: STATISTICS -->
-    <section class="subview" id="view-statistics">
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">Top Frequency (Last 100 Rounds)</div>
-      <div class="stats-scroll-list" id="stats-bars-container"></div>
-    </section>
-
-    <!-- SUBVIEW: LEADERS -->
-    <section class="subview" id="view-leaders">
-      <table class="table-leaders">
-        <thead>
-          <tr><th>#</th><th>User</th><th>Bet</th><th>Win</th></tr>
-        </thead>
-        <tbody id="leaders-tbody"></tbody>
-      </table>
-    </section>
-
+  <!-- Multiplier History Pill Ticker -->
+  <div class="history-ticker-wrap" id="historyTicker">
+    <div class="history-more-btn" onclick="openHistoryModal()">...</div>
   </div>
 
+  <!-- Main Game Layout Grid -->
+  <main class="main-game-layout">
+    <section class="game-arena-column">
+      <!-- Flight Canvas Arena -->
+      <div class="flight-arena">
+        <canvas id="flightCanvas"></canvas>
+        
+        <div class="multiplier-hud">
+          <div class="hud-mult-val" id="lblMultiplier">1.00x</div>
+          <div class="hud-crashed-lbl" id="lblCrashedStatus">FLEW AWAY!</div>
+        </div>
+
+        <!-- Waiting Banner (Screenshot 7) -->
+        <div class="waiting-banner" id="waitingBanner">
+          <div class="ufc-logo">UFC | <span>Aviator</span></div>
+          <div style="font-size:10px; font-weight:bold; color:#888; margin-top:2px;">OFFICIAL PARTNER</div>
+          <div class="spribe-verified-box">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Provably Fair Engine
+          </div>
+          <div class="waiting-progress-track">
+            <div class="waiting-progress-bar" id="waitProgressFill"></div>
+          </div>
+          <div class="waiting-title-text">WAITING FOR NEXT ROUND</div>
+        </div>
+      </div>
+
+      <!-- Dual Bet Panels -->
+      <div class="bet-panels-row">
+        <!-- Panel 0 -->
+        <div class="bet-panel" id="panel0">
+          <div class="panel-top-row">
+            <div class="mode-pills-wrap">
+              <button class="mode-pill-btn active" onclick="switchBetMode(0, 'manual', this)">Bet</button>
+              <button class="mode-pill-btn" onclick="switchBetMode(0, 'auto', this)">Auto</button>
+            </div>
+          </div>
+          <div class="panel-controls-grid">
+            <div class="stepper-side">
+              <div class="stepper-box">
+                <button class="step-math-btn" onclick="stepAmt(0, -1)">-</button>
+                <input type="number" id="inpAmt0" class="bet-val-input" value="4.00" step="1" min="1" max="1000">
+                <button class="step-math-btn" onclick="stepAmt(0, 1)">+</button>
+              </div>
+              <div class="chips-2x2-grid">
+                <div class="quick-chip" onclick="setAmt(0, 4)">4</div>
+                <div class="quick-chip" onclick="setAmt(0, 10)">10</div>
+                <div class="quick-chip" onclick="setAmt(0, 40)">40</div>
+                <div class="quick-chip" onclick="setAmt(0, 100)">100</div>
+              </div>
+            </div>
+            <button class="action-bet-btn btn-state-bet" id="btnAction0" onclick="handleBetClick(0)">
+              <div class="btn-main-title" id="lblMain0">Bet</div>
+              <div class="btn-sub-title" id="lblSub0">4.00 ETB</div>
+            </button>
+          </div>
+          <div class="auto-config-row" id="autoRow0">
+            <span>Auto Cash Out</span>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <input type="number" class="auto-mult-input" id="inpAutoMult0" value="2.00" step="0.1" min="1.01">
+              <span>x</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 1 (Collapsible) -->
+        <div class="bet-panel" id="panel1">
+          <div class="panel-top-row">
+            <div class="mode-pills-wrap">
+              <button class="mode-pill-btn active" onclick="switchBetMode(1, 'manual', this)">Bet</button>
+              <button class="mode-pill-btn" onclick="switchBetMode(1, 'auto', this)">Auto</button>
+            </div>
+            <button class="collapse-toggle-btn" id="collapseBtn1" onclick="togglePanel1()">-</button>
+          </div>
+          <div class="panel-controls-grid" id="panel1Controls">
+            <div class="stepper-side">
+              <div class="stepper-box">
+                <button class="step-math-btn" onclick="stepAmt(1, -1)">-</button>
+                <input type="number" id="inpAmt1" class="bet-val-input" value="4.00" step="1" min="1" max="1000">
+                <button class="step-math-btn" onclick="stepAmt(1, 1)">+</button>
+              </div>
+              <div class="chips-2x2-grid">
+                <div class="quick-chip" onclick="setAmt(1, 4)">4</div>
+                <div class="quick-chip" onclick="setAmt(1, 10)">10</div>
+                <div class="quick-chip" onclick="setAmt(1, 40)">40</div>
+                <div class="quick-chip" onclick="setAmt(1, 100)">100</div>
+              </div>
+            </div>
+            <button class="action-bet-btn btn-state-bet" id="btnAction1" onclick="handleBetClick(1)">
+              <div class="btn-main-title" id="lblMain1">Bet</div>
+              <div class="btn-sub-title" id="lblSub1">4.00 ETB</div>
+            </button>
+          </div>
+          <div class="auto-config-row" id="autoRow1">
+            <span>Auto Cash Out</span>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <input type="number" class="auto-mult-input" id="inpAutoMult1" value="2.00" step="0.1" min="1.01">
+              <span>x</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Community Bets Feed Section -->
+    <section class="live-bets-section">
+      <div class="bets-tabs-header">
+        <div class="b-tab-btn active" onclick="switchBetsTab('all', this)">All Bets</div>
+        <div class="b-tab-btn" onclick="switchBetsTab('prev', this)">Previous</div>
+        <div class="b-tab-btn" onclick="switchBetsTab('top', this)">Top</div>
+      </div>
+
+      <!-- Top Subfilters (Screenshot 4) -->
+      <div class="top-subfilters" id="topSubfilters">
+        <div class="filter-btn-group">
+          <div class="subfilter-btn active" onclick="filterTop('x', this)">X</div>
+          <div class="subfilter-btn" onclick="filterTop('win', this)">Win</div>
+          <div class="subfilter-btn" onclick="filterTop('round', this)">Rounds</div>
+        </div>
+        <div class="filter-btn-group">
+          <div class="subfilter-btn active" onclick="filterTopPeriod('day', this)">Day</div>
+          <div class="subfilter-btn" onclick="filterTopPeriod('month', this)">Month</div>
+          <div class="subfilter-btn" onclick="filterTopPeriod('year', this)">Year</div>
+        </div>
+      </div>
+
+      <!-- Previous Round Highlight (Screenshot 1 & 5) -->
+      <div class="prev-round-banner" id="prevRoundBanner">
+        <div class="prev-result-lbl">Round Result</div>
+        <div class="prev-result-mult" id="prevRoundMultiplier">1.23x</div>
+      </div>
+
+      <div class="bets-meta-bar">
+        <div class="bets-count-text" id="lblBetsCount">0 Bets</div>
+        <div class="total-win-block">
+          <span style="font-size:10px; color:#888;">Total win: </span>
+          <span class="total-win-sum" id="lblTotalWin">0.00 ETB</span>
+        </div>
+      </div>
+
+      <div class="table-col-labels">
+        <span>Player</span>
+        <span style="margin-left:25px;">Bet ETB</span>
+        <span>X</span>
+        <span>Win ETB</span>
+      </div>
+
+      <div class="bets-scroll-list" id="betsListFeed"></div>
+    </section>
+  </main>
 </div>
 
-<!-- RULES & PAYTABLE MODAL -->
-<div class="modal-overlay" id="rules-modal">
-  <div class="modal-container">
-    <div class="modal-header">
-      <div class="modal-nav">
-        <button class="modal-nav-btn active" id="modal-nav-rules" onclick="switchModalTab('rules')">RULES</button>
-        <button class="modal-nav-btn" id="modal-nav-paytable" onclick="switchModalTab('paytable')">PAYTABLE</button>
-      </div>
-      <button class="icon-btn" onclick="closeRulesModal()">
-        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-      </button>
+<!-- Round History Modal (Screenshot 3) -->
+<div class="history-modal-overlay" id="historyModal" onclick="closeHistoryModal()">
+  <div class="history-modal-card" onclick="event.stopPropagation()">
+    <div class="history-modal-header">
+      <span style="font-size:13px; font-weight:800; color:#fff;">ROUND HISTORY</span>
+      <span style="cursor:pointer; color:#888; font-weight:bold;" onclick="closeHistoryModal()">✕</span>
     </div>
-    <div class="modal-body" id="modal-content"></div>
+    <div class="history-grid-pills" id="modalHistoryGrid"></div>
+  </div>
+</div>
+
+<!-- Settings Sidebar Drawer (Screenshot 2) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)">
+  <div class="sidebar-menu" onclick="event.stopPropagation()">
+    <div class="menu-user-card">
+      <div class="user-profile-left">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#38bdf8"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 4-8 8h16c0-4-2-8-8-8z"/></svg>
+        <span id="menuUsername">2**8</span>
+      </div>
+      <button style="background:#282b33; color:#aaa; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:bold; cursor:pointer;" onclick="showToast('Profile')">Change Avatar</button>
+    </div>
+    
+    <div class="menu-item-row">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <span>Sound</span>
+      </div>
+      <!-- Default Silent 🔇 -->
+      <label class="switch"><input type="checkbox" id="chkSound" onchange="unlockAudio()"><span class="slider"></span></label>
+    </div>
+    <div class="menu-item-row">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span>Music</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chkMusic"><span class="slider"></span></label>
+    </div>
+    <div class="menu-item-row">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Animation</span>
+      </div>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="menu-item-row" onclick="showToast('Active Free Bets: 0')">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Free Bets</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="menu-item-row" onclick="openHistoryModal()">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>My Bet History</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="menu-item-row" onclick="showToast('Limits: 1 ETB - 1,000 ETB. Max Pay: 20,000 ETB')">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Game Limits</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="menu-item-row" onclick="showToast('Place bet, watch plane fly & cash out before it flies away!')">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>How To Play</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="menu-item-row" onclick="showToast('Provably Fair HMAC-SHA256 Active')">
+      <div class="menu-item-left">
+        <svg class="menu-svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Provably Fair Settings</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <button style="margin-top:auto; width:100%; background:#23252b; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;" onclick="toggleSidebar(false)">Close</button>
   </div>
 </div>
 
 <script>
-/**
- * Hulu Bet Mandatory Boilerplate & Integration Contract
- */
-const API = "https://hulubet-server.onrender.com";
-let INIT_DATA = "", serverBalance = 0, ready = false;
+  /* =====================================================================
+     1. MANDATORY BOILERPLATE (Spec Section 1)
+     ===================================================================== */
+  const API = "https://hulubet-server.onrender.com";
+  let INIT_DATA = "", serverBalance = 0, ready = false;
 
-async function api(path, opts = {}) {
-  try {
-    const r = await fetch(API + path, {
-      ...opts,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-telegram-init-data': INIT_DATA
-      }
-    });
-    return await r.json();
-  } catch (e) {
-    return { success: false, message: 'Connection problem' };
+  async function api(path, opts = {}) {
+    try {
+      const r = await fetch(API + path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-telegram-init-data': INIT_DATA
+        }
+      });
+      return await r.json();
+    } catch (e) {
+      return { success: false, message: 'Connection Error: websocket error' };
+    }
   }
-}
+  const postParent = m => { try { parent.postMessage(m, '*'); } catch (e) {} };
 
-const postParent = m => {
-  try { parent.postMessage(m, '*'); } catch (e) {}
-};
-
-addEventListener('message', e => {
-  if (e.source !== parent) return;
-  const d = e.data || {};
-  if (d.type === 'INIT' && d.initData) {
-    INIT_DATA = d.initData;
-    ready = true;
-    refreshBalance();
-    initPaytable();
-  }
-  if (d.type === 'UPDATE_BALANCE') refreshBalance();
-});
-
-postParent({ type: 'GAME_READY' });
-
-async function refreshBalance() {
-  const d = await api('/api/user/init');
-  if (d && d.success) {
-    serverBalance = d.balance;
-    showBalance();
-  }
-}
-
-function showBalance() {
-  document.getElementById('lbl-balance').textContent = Number(serverBalance || 0).toFixed(2);
-  postParent({ type: 'BALANCE_UPDATE', newBalance: serverBalance });
-}
-
-/**
- * 24/7 SYNCHRONIZED CLOCK CONFIGURATION
- */
-const BET_WINDOW = 60;
-const DRAW_WINDOW = 20;
-const TOTAL_CYCLE = 80;
-
-const MIN_BET = 1;
-const MAX_BET = 1000;
-const MAX_PICKS = 10;
-const MAX_MY_TICKETS = 10;
-
-let currentBetAmount = 4.00;
-let selectedNumbers = new Set();
-let isDrawingPhase = false;
-let isRequestInFlight = false;
-let soundEnabled = false;
-
-let myActiveTickets = [];
-let fullHistory = JSON.parse(localStorage.getItem('hulu_keno_history') || '[]');
-
-// Rolling Draw History for Real Statistics (Last 100 rounds)
-let drawHistoryStats = JSON.parse(localStorage.getItem('hulu_keno_stats') || 'null');
-if (!drawHistoryStats || drawHistoryStats.length === 0) {
-  drawHistoryStats = [];
-  // Seed with realistic base historical data
-  for (let r = 0; r < 20; r++) {
-    const p = Array.from({ length: 80 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 20);
-    drawHistoryStats.push(p);
-  }
-}
-
-let hotNumbersSet = new Set();
-let coldNumbersSet = new Set();
-
-const PLAYER_NAMES = ["d***a", "s***k", "y***o", "b***w", "m***e", "t***i", "k***b", "a***m", "09***1", "h***7", "w***j", "9***x"];
-const STAKE_AMOUNTS = [20, 50, 100, 200, 300, 500];
-let dynamicLiveTickets = [];
-let dynamicAllCount = 42;
-let simTicketIndex = 100;
-
-let paytable = {
-  "1": [0, 3.5],
-  "2": [0, 1, 10],
-  "3": [0, 0, 2, 50],
-  "4": [0, 0, 1.5, 10, 80],
-  "5": [0, 0, 1, 3, 30, 150],
-  "6": [0, 0, 0, 2, 15, 60, 500],
-  "7": [0, 1, 0, 2, 4, 20, 80, 1000],
-  "8": [0, 1, 0, 0, 5, 15, 50, 200, 2000],
-  "9": [0, 2, 0, 0, 2, 10, 25, 125, 1000, 5000],
-  "10": [0, 2, 0, 0, 0, 5, 30, 100, 300, 2000, 10000]
-};
-
-// Web Audio API
-let audioCtx = null;
-function getAudioContext() {
-  if (!audioCtx) {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (Ctx) audioCtx = new Ctx();
-  }
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-
-function playSynth(freq = 600, duration = 0.06, type = 'sine') {
-  if (!soundEnabled) return;
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(0.06, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
-  } catch (e) {}
-}
-
-function toggleAudio() {
-  soundEnabled = !soundEnabled;
-  const btn = document.getElementById('btn-sound');
-  if (soundEnabled) {
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>`;
-    btn.style.color = 'var(--accent-green-bright)';
-  } else {
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/></svg>`;
-    btn.style.color = '#ff4757';
-  }
-}
-
-/**
- * 24/7 GLOBAL CLOCK & ROUND DETERMINATION
- */
-function getGlobalRoundInfo() {
-  const nowSec = Math.floor(Date.now() / 1000);
-  const roundId = 45556 + Math.floor(nowSec / TOTAL_CYCLE);
-  const cycleSec = nowSec % TOTAL_CYCLE;
-  return { roundId, cycleSec };
-}
-
-function computeBaseRoundBets(rId) {
-  return 35 + ((rId * 13) % 450);
-}
-
-/**
- * DYNAMIC HOT & COLD NUMBERS & REAL STATISTICS
- */
-function updateDynamicHotColdAndStats() {
-  const counts = {};
-  for (let i = 1; i <= 80; i++) counts[i] = 0;
-
-  // Count occurrences across draw history
-  drawHistoryStats.forEach(draw => {
-    draw.forEach(num => {
-      if (counts[num] !== undefined) counts[num]++;
-    });
+  addEventListener('message', e => {
+    if (e.source !== parent) return;
+    const d = e.data || {};
+    if (d.type === 'INIT' && d.initData) {
+      INIT_DATA = d.initData;
+      ready = true;
+      refreshBalance();
+      loadFeed();
+    }
+    if (d.type === 'UPDATE_BALANCE') refreshBalance();
   });
+  postParent({ type: 'GAME_READY' });
 
-  // Sort numbers by frequency
-  const sorted = Object.keys(counts).map(Number).sort((a, b) => counts[b] - counts[a]);
-
-  // Top 5 are HOT, bottom 5 are COLD
-  hotNumbersSet = new Set(sorted.slice(0, 5));
-  coldNumbersSet = new Set(sorted.slice(75, 80));
-
-  // Update Statistics UI
-  renderLiveStatistics(counts, sorted);
-
-  // Re-render dots on grid
-  updateGridHotColdDots();
-}
-
-function renderLiveStatistics(counts, sorted) {
-  const container = document.getElementById('stats-bars-container');
-  if (!container) return;
-  container.innerHTML = '';
-
-  const maxCount = Math.max(...Object.values(counts), 1);
-
-  sorted.forEach(num => {
-    const count = counts[num];
-    const pct = Math.min(100, Math.round((count / maxCount) * 100));
-    const row = document.createElement('div');
-    row.className = 'stat-row';
-    row.innerHTML = `
-      <div class="stat-num">${num}</div>
-      <div class="stat-bar-outer"><div class="stat-bar-fill" style="width:${pct}%;"></div></div>
-      <div class="stat-count">${count}</div>
-    `;
-    container.appendChild(row);
-  });
-}
-
-function updateGridHotColdDots() {
-  for (let i = 1; i <= 80; i++) {
-    const cell = document.getElementById(`cell-${i}`);
-    if (cell) {
-      const existingDot = cell.querySelector('.cell-dot');
-      if (existingDot) existingDot.remove();
-
-      if (hotNumbersSet.has(i)) {
-        const dot = document.createElement('span');
-        dot.className = 'cell-dot dot-hot';
-        cell.appendChild(dot);
-      } else if (coldNumbersSet.has(i)) {
-        const dot = document.createElement('span');
-        dot.className = 'cell-dot dot-cold';
-        cell.appendChild(dot);
+  async function refreshBalance() {
+    const d = await api('/api/user/init');
+    if (d && d.success) {
+      serverBalance = d.balance;
+      showBalance();
+      if (d.user && d.user.username) {
+        document.getElementById('menuUsername').innerText = d.user.username;
       }
     }
   }
-}
-
-/**
- * INITIALIZATION
- */
-async function initPaytable() {
-  const d = await api('/api/keno/paytable');
-  if (d && d.success && d.paytable) {
-    paytable = d.paytable;
-    updatePossibleWin();
+  function showBalance() {
+    document.getElementById('lblUserBalance').innerText = Number(serverBalance).toFixed(2);
+    postParent({ type: 'BALANCE_UPDATE', newBalance: serverBalance });
   }
-}
 
-function buildGrid() {
-  const grid = document.getElementById('keno-grid');
-  grid.innerHTML = '';
-  for (let i = 1; i <= 80; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-cell';
-    cell.id = `cell-${i}`;
-    cell.textContent = i;
-    cell.onclick = () => togglePick(i);
-    grid.appendChild(cell);
+  /* =====================================================================
+     2. AUDIO SYNTHESIZER (Starts Muted by Default)
+     ===================================================================== */
+  let audioCtx = null;
+  function unlockAudio() {
+    if (!audioCtx) {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtor) audioCtx = new AudioCtor();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }
-  updateGridHotColdDots();
-}
 
-function togglePick(num) {
-  if (isDrawingPhase) return;
-  playSynth(550, 0.03);
+  function playTone(freq, type, dur, gainVal = 0.08) {
+    if (!document.getElementById("chkSound").checked) return;
+    try {
+      unlockAudio();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + dur);
+    } catch(e) {}
+  }
 
-  if (selectedNumbers.has(num)) {
-    selectedNumbers.delete(num);
-  } else {
-    if (selectedNumbers.size >= MAX_PICKS) {
-      showToast('Maximum 10 numbers allowed', 'error');
+  const AUDIO = {
+    click: () => playTone(600, 'sine', 0.04),
+    cashout: () => {
+      playTone(620, 'triangle', 0.1);
+      setTimeout(() => playTone(880, 'triangle', 0.25), 90);
+    },
+    crash: () => playTone(120, 'sawtooth', 0.35, 0.15)
+  };
+
+  /* =====================================================================
+     3. GROWTH CURVE & AUTONOMOUS STATE LIFECYCLE
+     ===================================================================== */
+  let gameState = "WAITING"; // WAITING | FLYING | CRASHED
+  let flightStartTime = 0;
+  let currentMultiplier = 1.00;
+  let simulatedCrashPoint = 1.99;
+  let isServerAuthoritativeRound = false; 
+  let growthParams = { a: 0.065, b: 0.035, c: 1.48 };
+  let statusPollTimer = null;
+  let animFrameId = null;
+
+  const panels = [
+    { queued: false, betId: null, autoCash: false, settled: false },
+    { queued: false, betId: null, autoCash: false, settled: false }
+  ];
+
+  function calcMultiplier(tSec) {
+    const { a, b, c } = growthParams;
+    const mult = 1 + a * tSec + b * Math.pow(tSec, c);
+    return Math.floor(mult * 100) / 100;
+  }
+
+  /* =====================================================================
+     4. BETTING CONTROLS
+     ===================================================================== */
+  function stepAmt(idx, delta) {
+    AUDIO.click();
+    const inp = document.getElementById(`inpAmt${idx}`);
+    let val = Math.max(1, Math.min(1000, (parseFloat(inp.value) || 0) + delta));
+    inp.value = val.toFixed(2);
+    if (!panels[idx].queued && !panels[idx].betId) {
+      document.getElementById(`lblSub${idx}`).innerText = `${val.toFixed(2)} ETB`;
+    }
+  }
+
+  function setAmt(idx, val) {
+    AUDIO.click();
+    const inp = document.getElementById(`inpAmt${idx}`);
+    inp.value = Number(val).toFixed(2);
+    if (!panels[idx].queued && !panels[idx].betId) {
+      document.getElementById(`lblSub${idx}`).innerText = `${Number(val).toFixed(2)} ETB`;
+    }
+  }
+
+  function switchBetMode(idx, mode, btn) {
+    btn.parentElement.querySelectorAll(".mode-pill-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const autoRow = document.getElementById(`autoRow${idx}`);
+    if (mode === 'auto') {
+      autoRow.classList.add('open');
+      panels[idx].autoCash = true;
+    } else {
+      autoRow.classList.remove('open');
+      panels[idx].autoCash = false;
+    }
+  }
+
+  function togglePanel1() {
+    const ctrl = document.getElementById("panel1Controls");
+    const btn = document.getElementById("collapseBtn1");
+    if (ctrl.style.display === "none") {
+      ctrl.style.display = "flex";
+      btn.innerText = "-";
+    } else {
+      ctrl.style.display = "none";
+      btn.innerText = "+";
+    }
+  }
+
+  async function handleBetClick(idx) {
+    unlockAudio();
+    const p = panels[idx];
+    const btn = document.getElementById(`btnAction${idx}`);
+    const mainLbl = document.getElementById(`lblMain${idx}`);
+    const subLbl = document.getElementById(`lblSub${idx}`);
+
+    // Cashout execution during flight
+    if (gameState === "FLYING" && p.betId && !p.settled) {
+      await executeCashout(idx);
       return;
     }
-    selectedNumbers.add(num);
-  }
-  syncGridSelections();
-  updatePossibleWin();
-}
 
-function syncGridSelections() {
-  for (let i = 1; i <= 80; i++) {
-    const el = document.getElementById(`cell-${i}`);
-    if (el) el.classList.toggle('selected', selectedNumbers.has(i));
-  }
-}
-
-function clearPicks() {
-  if (isDrawingPhase) return;
-  selectedNumbers.clear();
-  syncGridSelections();
-  updatePossibleWin();
-}
-
-function autoPick(count = 5) {
-  if (isDrawingPhase) return;
-  clearPicks();
-  playSynth(750, 0.05);
-
-  const pool = Array.from({ length: 80 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-  pool.slice(0, count).forEach(n => selectedNumbers.add(n));
-
-  syncGridSelections();
-  updatePossibleWin();
-}
-
-function updatePossibleWin() {
-  const defBanner = document.getElementById('default-banner');
-  const winBanner = document.getElementById('possible-win-view');
-  const oddsRow = document.getElementById('odds-row-container');
-  const rack = document.getElementById('selected-rack');
-  const winVal = document.getElementById('lbl-possible-win');
-
-  const count = selectedNumbers.size;
-  if (count === 0) {
-    defBanner.style.display = 'block';
-    winBanner.style.display = 'none';
-    return;
-  }
-
-  defBanner.style.display = 'none';
-  winBanner.style.display = 'block';
-
-  const oddsTable = paytable[String(count)] || [];
-  const maxM = oddsTable.length > 0 ? oddsTable[oddsTable.length - 1] : 0;
-  winVal.textContent = (maxM * currentBetAmount).toFixed(0);
-
-  oddsRow.innerHTML = '';
-  const matchRow = document.createElement('div');
-  matchRow.innerHTML = `<span style="margin-right:4px;">Match</span>`;
-  const paysRow = document.createElement('div');
-  paysRow.innerHTML = `<span style="margin-right:4px;">Pays</span>`;
-
-  for (let h = 1; h <= count; h++) {
-    const mult = oddsTable[h] !== undefined ? oddsTable[h] : 0;
-    if (mult > 0) {
-      matchRow.innerHTML += `<span class="hl"> ${h} </span>`;
-      paysRow.innerHTML += `<span class="hl"> x${mult} </span>`;
+    // Cancel queued bet
+    if (p.queued) {
+      p.queued = false;
+      btn.className = "action-bet-btn btn-state-bet";
+      mainLbl.innerText = "Bet";
+      const amt = parseFloat(document.getElementById(`inpAmt${idx}`).value) || 4;
+      subLbl.innerText = `${amt.toFixed(2)} ETB`;
+      AUDIO.click();
+      return;
     }
-  }
-  oddsRow.appendChild(matchRow);
-  oddsRow.appendChild(paysRow);
 
-  rack.innerHTML = '';
-  const picksArr = Array.from(selectedNumbers);
-  for (let i = 0; i < MAX_PICKS; i++) {
-    const slot = document.createElement('div');
-    slot.className = 'rack-slot';
-    if (picksArr[i] !== undefined) {
-      slot.classList.add('filled');
-      slot.textContent = picksArr[i];
+    // Validate Bet Amount
+    const amount = parseFloat(document.getElementById(`inpAmt${idx}`).value);
+    if (isNaN(amount) || amount < 1 || amount > 1000) {
+      showToast("Bet must be between 1 and 1000 ETB");
+      return;
     }
-    rack.appendChild(slot);
-  }
-}
+    if (amount > serverBalance) {
+      showToast("Insufficient balance");
+      postParent({ type: 'OPEN_DEPOSIT' });
+      return;
+    }
 
-/**
- * BET STEPPER
- */
-function adjustBet(d) {
-  if (isDrawingPhase) return;
-  playSynth(450, 0.02);
-  let v = currentBetAmount + d;
-  if (v < MIN_BET) v = MIN_BET;
-  if (v > MAX_BET) v = MAX_BET;
-  currentBetAmount = v;
-  renderBetDisplay();
-}
-
-function multiplyBet(m) {
-  if (isDrawingPhase) return;
-  playSynth(500, 0.02);
-  let v = currentBetAmount * m;
-  if (v > MAX_BET) v = MAX_BET;
-  currentBetAmount = v;
-  renderBetDisplay();
-}
-
-function setMaxBet() {
-  if (isDrawingPhase) return;
-  currentBetAmount = MAX_BET;
-  renderBetDisplay();
-}
-
-function renderBetDisplay() {
-  document.getElementById('lbl-bet-amount').textContent = currentBetAmount.toFixed(2);
-  updatePossibleWin();
-}
-
-/**
- * PLACE TICKET
- */
-async function placeKenoTicket() {
-  if (isDrawingPhase || isRequestInFlight) return;
-
-  if (selectedNumbers.size === 0) {
-    showToast('Choose at least 1 number', 'error');
-    return;
-  }
-  if (myActiveTickets.length >= MAX_MY_TICKETS) {
-    showToast('Maximum 10 tickets per round', 'error');
-    return;
-  }
-  if (serverBalance < currentBetAmount) {
-    showToast('Not enough balance for this bet', 'error');
-    postParent({ type: 'OPEN_DEPOSIT' });
-    return;
+    // Queue for the next round
+    p.queued = true;
+    if (gameState === "FLYING") {
+      btn.className = "action-bet-btn btn-state-waiting";
+      mainLbl.innerText = "WAITING...";
+      subLbl.innerText = "Next Round (Cancel)";
+    } else {
+      btn.className = "action-bet-btn btn-state-cancel";
+      mainLbl.innerText = "Cancel";
+      subLbl.innerText = `${amount.toFixed(2)} ETB`;
+    }
+    AUDIO.click();
   }
 
-  isRequestInFlight = true;
-  const btn = document.getElementById('btn-bet');
-  btn.disabled = true;
-  btn.classList.add('accepted');
-  btn.innerHTML = `
-    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-    <span>BET ACCEPTED</span>
-  `;
+  /* =====================================================================
+     5. AUTONOMOUS GAME LOOP (Never stops, runs continuous rounds)
+     ===================================================================== */
+  function startAutonomousWaitingPhase() {
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+    gameState = "WAITING";
+    document.getElementById("lblCrashedStatus").style.display = "none";
+    document.getElementById("waitingBanner").style.display = "flex";
+    const multTxt = document.getElementById("lblMultiplier");
+    multTxt.className = "hud-mult-val";
+    multTxt.innerText = "1.00x";
 
-  postParent({ type: 'BET_STARTED' });
-
-  const { roundId } = getGlobalRoundInfo();
-
-  // Authoritative server call
-  const res = await api('/api/bet/play', {
-    method: 'POST',
-    body: JSON.stringify({
-      gameName: "KenoFast",
-      betAmount: currentBetAmount,
-      clientData: {
-        picks: Array.from(selectedNumbers)
+    // Set buttons for queued players
+    panels.forEach((p, idx) => {
+      if (p.queued) {
+        const btn = document.getElementById(`btnAction${idx}`);
+        btn.className = "action-bet-btn btn-state-cancel";
+        document.getElementById(`lblMain${idx}`).innerText = "Cancel";
+        const amt = parseFloat(document.getElementById(`inpAmt${idx}`).value) || 4;
+        document.getElementById(`lblSub${idx}`).innerText = `${amt.toFixed(2)} ETB`;
       }
-    })
-  });
+    });
 
-  if (!res || !res.success) {
-    isRequestInFlight = false;
-    btn.disabled = false;
-    btn.classList.remove('accepted');
-    btn.innerHTML = `<span>BET</span>`;
-    postParent({ type: 'BET_ENDED' });
-    showToast(res.message || 'Bet placement failed', 'error');
-    return;
+    let waitProgress = 0;
+    const fill = document.getElementById("waitProgressFill");
+    fill.style.width = "0%";
+
+    const waitInterval = setInterval(async () => {
+      waitProgress += 4;
+      fill.style.width = Math.min(100, waitProgress) + "%";
+
+      if (waitProgress >= 100) {
+        clearInterval(waitInterval);
+        document.getElementById("waitingBanner").style.display = "none";
+        await initiateFlightRound();
+      }
+    }, 120);
   }
 
-  if (res.newBalance !== undefined) {
-    serverBalance = res.newBalance;
-    showBalance();
-  }
+  async function initiateFlightRound() {
+    const queuedBets = [];
+    const queuedIndices = [];
 
-  playSynth(850, 0.08);
-
-  const tktIndex = myActiveTickets.length + 1;
-  const ticketObj = {
-    id: `usertkt_${Date.now()}_${tktIndex}`,
-    ticketNumber: tktIndex,
-    picks: Array.from(selectedNumbers),
-    amount: currentBetAmount,
-    roundId: roundId,
-    status: 'Waiting',
-    serverRes: res
-  };
-
-  myActiveTickets.push(ticketObj);
-  saveActiveTicketsToStorage();
-  renderActiveUserTickets();
-
-  dynamicAllCount++;
-  document.getElementById('lbl-all-count').textContent = dynamicAllCount;
-
-  isRequestInFlight = false;
-  btn.disabled = false;
-  btn.classList.remove('accepted');
-  btn.innerHTML = `<span>BET</span>`;
-
-  clearPicks();
-}
-
-function saveActiveTicketsToStorage() {
-  localStorage.setItem('hulu_keno_active_tickets', JSON.stringify(myActiveTickets));
-}
-
-function loadPersistedActiveTickets(currentRId) {
-  const saved = localStorage.getItem('hulu_keno_active_tickets');
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      myActiveTickets = parsed.filter(t => t.roundId === currentRId);
-      renderActiveUserTickets();
-    } catch (e) {}
-  }
-}
-
-// Clean user tickets: "My Ticket 1" only
-function renderActiveUserTickets() {
-  const container = document.getElementById('my-tickets-container');
-  container.innerHTML = '';
-  document.getElementById('lbl-my-tickets-count').textContent = myActiveTickets.length;
-  const totalWager = myActiveTickets.reduce((acc, t) => acc + t.amount, 0);
-  document.getElementById('lbl-my-bets-total').textContent = totalWager.toFixed(0);
-
-  myActiveTickets.forEach((t) => {
-    const slots = Array.from({ length: 10 }, (_, i) => {
-      const p = t.picks[i];
-      return p !== undefined 
-        ? `<div class="ticket-slot" id="uslot_${t.id}_${p}">${p}</div>` 
-        : `<div class="ticket-slot empty"></div>`;
-    }).join('');
-
-    const card = document.createElement('div');
-    card.className = 'ticket-row user-ticket';
-    card.id = `trow_${t.id}`;
-    card.innerHTML = `
-      <div class="ticket-user-line">
-        <span>My Ticket ${t.ticketNumber}</span>
-      </div>
-      <div class="ticket-numbers-grid">${slots}</div>
-      <div class="ticket-bottom-line">
-        <span>Bet ${t.amount.toFixed(0)} ETB</span>
-        <span class="status-waiting" id="status_${t.id}">${t.status}</span>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-/**
- * OTHER PLAYERS TICKETS (Using Safe Integer IDs: No querySelector SyntaxErrors)
- */
-function createRealisticPlayerTicket() {
-  simTicketIndex++;
-  const name = PLAYER_NAMES[Math.floor(Math.random() * PLAYER_NAMES.length)];
-  const pickCount = Math.floor(Math.random() * 4) + 3;
-  const pool = Array.from({ length: 80 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-  const picks = pool.slice(0, pickCount);
-  const amt = STAKE_AMOUNTS[Math.floor(Math.random() * STAKE_AMOUNTS.length)];
-  return {
-    id: `sim_${simTicketIndex}`,
-    user: name,
-    picks: picks,
-    amount: amt,
-    status: 'Waiting'
-  };
-}
-
-function initDynamicPlayerFeed() {
-  dynamicLiveTickets = [
-    createRealisticPlayerTicket(),
-    createRealisticPlayerTicket(),
-    createRealisticPlayerTicket()
-  ];
-  renderDynamicFeed();
-}
-
-function renderDynamicFeed() {
-  const container = document.getElementById('live-dynamic-tickets-container');
-  container.innerHTML = dynamicLiveTickets.map(t => {
-    const slots = Array.from({ length: 10 }, (_, i) => {
-      const p = t.picks[i];
-      return p !== undefined 
-        ? `<div class="ticket-slot" id="dslot_${t.id}_${p}">${p}</div>` 
-        : `<div class="ticket-slot empty"></div>`;
-    }).join('');
-
-    return `
-      <div class="ticket-row" id="prow_${t.id}">
-        <div class="ticket-user-line">
-          <span>${t.user}</span>
-        </div>
-        <div class="ticket-numbers-grid">${slots}</div>
-        <div class="ticket-bottom-line">
-          <span>Bet ${t.amount} ETB</span>
-          <span class="status-waiting" id="dstatus_${t.id}">${t.status}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-/**
- * 24/7 CONTINUOUS GLOBAL TIMER LOOP
- */
-let lastCycleState = 'betting';
-let activeDrawRunning = false;
-
-setInterval(() => {
-  const { roundId, cycleSec } = getGlobalRoundInfo();
-  document.getElementById('lbl-round-id').textContent = roundId;
-
-  if (cycleSec < BET_WINDOW) {
-    // BETTING PHASE
-    isDrawingPhase = false;
-    activeDrawRunning = false;
-
-    // Grid is visible
-    document.getElementById('grid-container-section').style.display = 'block';
-    document.getElementById('controls-section').style.display = 'block';
-    document.getElementById('draw-view').style.display = 'none';
-    document.getElementById('selection-view').style.display = 'flex';
-
-    const remSec = BET_WINDOW - cycleSec;
-    const timerEl = document.getElementById('stage-timer');
-    timerEl.classList.remove('live');
-    timerEl.textContent = `00:${remSec < 10 ? '0' : ''}${remSec}`;
-
-    if (lastCycleState === 'drawing') {
-      lastCycleState = 'betting';
-      dynamicAllCount = computeBaseRoundBets(roundId);
-      document.getElementById('lbl-all-count').textContent = dynamicAllCount;
-      myActiveTickets = [];
-      localStorage.removeItem('hulu_keno_active_tickets');
-      renderActiveUserTickets();
-      initDynamicPlayerFeed();
-      document.getElementById('btn-bet').disabled = false;
-    }
-
-    if (remSec % 2 === 0) {
-      dynamicAllCount += Math.floor(Math.random() * 3) + 1;
-      document.getElementById('lbl-all-count').textContent = dynamicAllCount;
-
-      if (dynamicLiveTickets.length < 8 && Math.random() < 0.6) {
-        dynamicLiveTickets.unshift(createRealisticPlayerTicket());
-        renderDynamicFeed();
+    for (let i = 0; i < 2; i++) {
+      if (panels[i].queued) {
+        const amt = parseFloat(document.getElementById(`inpAmt${i}`).value);
+        let autoVal = null;
+        if (panels[i].autoCash) {
+          const val = parseFloat(document.getElementById(`inpAutoMult${i}`).value);
+          if (val && val >= 1.01) autoVal = val;
+        }
+        queuedBets.push({ amount: amt, auto: autoVal });
+        queuedIndices.push(i);
       }
     }
-  } else {
-    // 20-BALL DRAW PHASE
-    isDrawingPhase = true;
-    lastCycleState = 'drawing';
 
-    const timerEl = document.getElementById('stage-timer');
-    timerEl.textContent = 'LIVE';
-    timerEl.classList.add('live');
+    if (queuedBets.length > 0) {
+      // Real player participation via authoritative server
+      postParent({ type: 'BET_STARTED' });
+      queuedIndices.forEach(idx => {
+        document.getElementById(`btnAction${idx}`).disabled = true;
+      });
 
-    // 80 NUMBERS GRID DISAPPEARS COMPLETELY DURING 20-BALL DRAW
-    document.getElementById('grid-container-section').style.display = 'none';
-    document.getElementById('controls-section').style.display = 'none';
-    document.getElementById('selection-view').style.display = 'none';
-    document.getElementById('draw-view').style.display = 'flex';
+      const res = await api('/api/crash/bet', {
+        method: 'POST',
+        body: JSON.stringify({ gameName: 'Aviator', bets: queuedBets })
+      });
 
-    if (!activeDrawRunning) {
-      activeDrawRunning = true;
-      execute20BallDraw(roundId);
+      queuedIndices.forEach(idx => {
+        document.getElementById(`btnAction${idx}`).disabled = false;
+      });
+
+      if (res && res.success) {
+        isServerAuthoritativeRound = true;
+        serverBalance = res.newBalance;
+        showBalance();
+
+        if (res.growth) growthParams = res.growth;
+
+        res.betIds.forEach((bId, k) => {
+          const idx = queuedIndices[k];
+          panels[idx].betId = bId;
+          panels[idx].queued = false;
+          panels[idx].settled = false;
+
+          const btn = document.getElementById(`btnAction${idx}`);
+          btn.className = "action-bet-btn btn-state-cashout";
+          document.getElementById(`lblMain${idx}`).innerText = "CASH OUT";
+        });
+      } else {
+        isServerAuthoritativeRound = false;
+        showToast(res.message || "Connection Error: websocket error");
+        queuedIndices.forEach(idx => {
+          panels[idx].queued = false;
+          const btn = document.getElementById(`btnAction${idx}`);
+          btn.className = "action-bet-btn btn-state-bet";
+          document.getElementById(`lblMain${idx}`).innerText = "Bet";
+        });
+        postParent({ type: 'BET_ENDED' });
+      }
+    } else {
+      // Continuous autonomous simulation
+      isServerAuthoritativeRound = false;
+      const roll = Math.random();
+      if (roll < 0.10) simulatedCrashPoint = Number((1.01 + Math.random() * 0.15).toFixed(2));
+      else if (roll < 0.65) simulatedCrashPoint = Number((1.20 + Math.random() * 1.40).toFixed(2));
+      else if (roll < 0.90) simulatedCrashPoint = Number((2.60 + Math.random() * 4.50).toFixed(2));
+      else simulatedCrashPoint = Number((7.00 + Math.random() * 25.00).toFixed(2));
+    }
+
+    gameState = "FLYING";
+    flightStartTime = performance.now();
+    document.getElementById("lblCrashedStatus").style.display = "none";
+    const multTxt = document.getElementById("lblMultiplier");
+    multTxt.className = "hud-mult-val";
+    multTxt.innerText = "1.00x";
+
+    runAnimationLoop();
+    if (isServerAuthoritativeRound) {
+      startStatusPolling();
     }
   }
-}, 1000);
 
-/**
- * 20-BALL DRAW RECURSIVE TIMER: ZERO SYNTAX ERRORS & ZERO FREEZING
- */
-function execute20BallDraw(roundId) {
-  try {
-    const tray = document.getElementById('drawn-tray');
-    tray.innerHTML = '';
-    const bigBall = document.getElementById('current-drawn-ball');
+  function runAnimationLoop() {
+    function frame(now) {
+      if (gameState !== "FLYING") return;
+      const elapsedSec = Math.max(0, (now - flightStartTime) / 1000);
+      currentMultiplier = calcMultiplier(elapsedSec);
 
-    let drawnNumbers = [];
-    if (myActiveTickets.length > 0 && myActiveTickets[0].serverRes && myActiveTickets[0].serverRes.visualOutcome) {
-      drawnNumbers = myActiveTickets[0].serverRes.visualOutcome.drawnNumbers || [];
-    }
-    if (!drawnNumbers || drawnNumbers.length !== 20) {
-      const pool = Array.from({ length: 80 }, (_, i) => i + 1);
-      drawnNumbers = pool.sort(() => Math.random() - 0.5).slice(0, 20);
-    }
+      document.getElementById("lblMultiplier").innerText = currentMultiplier.toFixed(2) + "x";
 
-    let currentIndex = 0;
+      for (let i = 0; i < 2; i++) {
+        if (panels[i].betId && !panels[i].settled) {
+          const betAmt = parseFloat(document.getElementById(`inpAmt${i}`).value) || 0;
+          document.getElementById(`lblSub${i}`).innerText = `${(betAmt * currentMultiplier).toFixed(2)} ETB`;
+        }
+      }
 
-    function revealNextBall() {
-      if (currentIndex >= 20) {
-        settleRoundResults(roundId, drawnNumbers);
+      updateLiveFeedCashouts(currentMultiplier);
+      renderCanvasScene(elapsedSec);
+
+      // Autonomous simulation crash trigger
+      if (!isServerAuthoritativeRound && currentMultiplier >= simulatedCrashPoint) {
+        settleCrash(simulatedCrashPoint);
         return;
       }
 
-      const b = drawnNumbers[currentIndex];
-      bigBall.textContent = b;
-      bigBall.style.animation = 'none';
-      void bigBall.offsetWidth;
-      bigBall.style.animation = 'popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-
-      playSynth(300 + (currentIndex * 20), 0.08);
-
-      // Safe DOM lookup using getElementById (never throws querySelector syntax errors)
-      myActiveTickets.forEach(t => {
-        if (t.picks.includes(b)) {
-          const slot = document.getElementById(`uslot_${t.id}_${b}`);
-          if (slot) slot.classList.add('hit');
-        }
-      });
-
-      dynamicLiveTickets.forEach(t => {
-        if (t.picks.includes(b)) {
-          const dSlot = document.getElementById(`dslot_${t.id}_${b}`);
-          if (dSlot) dSlot.classList.add('hit');
-        }
-      });
-
-      const isHit = myActiveTickets.some(t => t.picks.includes(b));
-      const mini = document.createElement('div');
-      mini.className = `mini-ball ${isHit ? 'hit' : ''}`;
-      mini.textContent = b;
-      tray.appendChild(mini);
-
-      currentIndex++;
-      setTimeout(revealNextBall, 850);
+      animFrameId = requestAnimationFrame(frame);
     }
-
-    revealNextBall();
-  } catch (err) {
-    console.error("Draw loop error:", err);
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+    animFrameId = requestAnimationFrame(frame);
   }
-}
 
-function settleRoundResults(roundId, drawnNumbers) {
-  let userTotalWin = 0;
-
-  // Add round draw to statistics history
-  drawHistoryStats.unshift(drawnNumbers);
-  if (drawHistoryStats.length > 100) drawHistoryStats.pop();
-  localStorage.setItem('hulu_keno_stats', JSON.stringify(drawHistoryStats));
-
-  // Dynamically update Hot & Cold numbers and Statistics tab based on actual history
-  updateDynamicHotColdAndStats();
-
-  myActiveTickets.forEach(t => {
-    let win = 0;
-    const hits = t.picks.filter(n => drawnNumbers.includes(n)).length;
-
-    if (t.serverRes && t.serverRes.payout !== undefined) {
-      win = t.serverRes.payout;
-    } else {
-      const multList = paytable[String(t.picks.length)] || [];
-      const m = multList[hits] || 0;
-      win = t.amount * m;
-    }
-
-    const stEl = document.getElementById(`status_${t.id}`);
-    if (win > 0) {
-      userTotalWin += win;
-      if (stEl) {
-        stEl.textContent = `WON +${win.toFixed(0)} ETB`;
-        stEl.className = 'status-won';
+  function startStatusPolling() {
+    if (statusPollTimer) clearInterval(statusPollTimer);
+    statusPollTimer = setInterval(async () => {
+      if (gameState !== "FLYING" || !isServerAuthoritativeRound) {
+        clearInterval(statusPollTimer);
+        return;
       }
-    } else if (stEl) {
-      stEl.textContent = `Settled`;
-      stEl.className = 'status-lost';
-    }
 
-    fullHistory.unshift({
-      roundId: t.roundId,
-      picks: t.picks,
-      amount: t.amount,
-      hits: hits,
-      win: win,
-      status: win > 0 ? 'WON' : 'LOST'
+      const active = panels.find(p => p.betId && !p.settled);
+      if (!active) return;
+
+      const res = await api(`/api/crash/status?betId=${active.betId}`);
+      if (!res || !res.success) return;
+
+      if (res.state === "CRASHED") {
+        settleCrash(res.crashPoint || currentMultiplier);
+      } else if (res.state === "WON") {
+        active.settled = true;
+        AUDIO.cashout();
+        serverBalance = res.newBalance;
+        showBalance();
+        finalizePanelWin(panels.indexOf(active), res.payout);
+      }
+    }, 250);
+  }
+
+  async function executeCashout(idx) {
+    const p = panels[idx];
+    if (!p.betId || p.settled) return;
+
+    const btn = document.getElementById(`btnAction${idx}`);
+    btn.disabled = true;
+
+    const res = await api('/api/crash/cashout', {
+      method: 'POST',
+      body: JSON.stringify({
+        betId: p.betId,
+        clientMult: currentMultiplier
+      })
     });
-  });
 
-  localStorage.setItem('hulu_keno_history', JSON.stringify(fullHistory.slice(0, 50)));
+    btn.disabled = false;
 
-  dynamicLiveTickets.forEach(t => {
-    const hits = t.picks.filter(n => drawnNumbers.includes(n)).length;
-    const multList = paytable[String(t.picks.length)] || [];
-    const m = multList[hits] || 0;
-    const win = t.amount * m;
-    const stEl = document.getElementById(`dstatus_${t.id}`);
-    if (win > 0 && stEl) {
-      stEl.textContent = `WON +${win.toFixed(0)} ETB`;
-      stEl.className = 'status-won';
-    } else if (stEl) {
-      stEl.textContent = `Settled`;
-      stEl.className = 'status-lost';
+    if (res && res.success) {
+      p.settled = true;
+      serverBalance = res.newBalance;
+      showBalance();
+
+      if (res.state === "WON") {
+        AUDIO.cashout();
+        finalizePanelWin(idx, res.payout);
+      } else if (res.state === "CRASHED") {
+        settleCrash(res.crashPoint || currentMultiplier);
+      }
+    } else {
+      showToast(res.message || "Cashout failed");
     }
+  }
+
+  function finalizePanelWin(idx, payout) {
+    const btn = document.getElementById(`btnAction${idx}`);
+    btn.className = "action-bet-btn btn-state-bet";
+    document.getElementById(`lblMain${idx}`).innerText = "WON!";
+    document.getElementById(`lblSub${idx}`).innerText = `+${Number(payout).toFixed(2)} ETB`;
+
+    setTimeout(() => {
+      panels[idx].betId = null;
+      panels[idx].settled = false;
+      document.getElementById(`lblMain${idx}`).innerText = "Bet";
+      const amt = parseFloat(document.getElementById(`inpAmt${idx}`).value) || 4;
+      document.getElementById(`lblSub${idx}`).innerText = `${amt.toFixed(2)} ETB`;
+    }, 2000);
+  }
+
+  function settleCrash(crashPoint) {
+    if (gameState === "CRASHED") return;
+    gameState = "CRASHED";
+
+    if (statusPollTimer) clearInterval(statusPollTimer);
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+
+    AUDIO.crash();
+
+    const multTxt = document.getElementById("lblMultiplier");
+    multTxt.innerText = Number(crashPoint).toFixed(2) + "x";
+    multTxt.classList.add("crashed");
+    document.getElementById("lblCrashedStatus").style.display = "block";
+
+    addHistoryPill(crashPoint);
+    document.getElementById("prevRoundMultiplier").innerText = Number(crashPoint).toFixed(2) + "x";
+
+    if (isServerAuthoritativeRound) {
+      postParent({ type: 'BET_ENDED' });
+      isServerAuthoritativeRound = false;
+    }
+
+    panels.forEach((p, i) => {
+      p.betId = null;
+      p.settled = false;
+      const btn = document.getElementById(`btnAction${i}`);
+      btn.disabled = false;
+      if (!p.queued) {
+        btn.className = "action-bet-btn btn-state-bet";
+        document.getElementById(`lblMain${i}`).innerText = "Bet";
+        const amt = parseFloat(document.getElementById(`inpAmt${i}`).value) || 4;
+        document.getElementById(`lblSub${i}`).innerText = `${amt.toFixed(2)} ETB`;
+      }
+    });
+
+    loadFeed();
+
+    // 2.8s crash cooldown then automatically restarts loop
+    setTimeout(() => {
+      startAutonomousWaitingPhase();
+    }, 2800);
+  }
+
+  /* =====================================================================
+     6. CANVAS GRAPHICS & UNPREDICTABLE HOVERING MOTION
+     ===================================================================== */
+  const canvas = document.getElementById("flightCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas() {
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+  }
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    renderCanvasScene(0);
   });
+  resizeCanvas();
 
-  // Simple Toast as requested: "won 25"
-  if (userTotalWin > 0) {
-    playSynth(880, 0.25, 'triangle');
-    showToast(`won ${userTotalWin.toFixed(0)}`, 'success');
+  function renderCanvasScene(sec) {
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // 1. Center Red/Purple Radial Glow
+    const glow = ctx.createRadialGradient(w * 0.45, h * 0.5, 10, w * 0.45, h * 0.5, w * 0.55);
+    glow.addColorStop(0, "rgba(50, 15, 30, 0.45)");
+    glow.addColorStop(0.65, "rgba(18, 10, 25, 0.2)");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, w, h);
+
+    // 2. Continuous rotating sunburst fan rays
+    ctx.save();
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
+    ctx.lineWidth = 1.5;
+    const scrollAngle = (sec * 0.8) % (Math.PI / 18);
+    for (let i = -1; i < 20; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      const angle = (i / 18) * (Math.PI / 2) + scrollAngle;
+      ctx.lineTo(Math.cos(angle) * w * 1.5, h - Math.sin(angle) * h * 1.5);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 3. Left Vertical Axis (Blue Dots)
+    ctx.fillStyle = "#38bdf8";
+    for (let y = 16; y < h - 16; y += 18) {
+      ctx.beginPath();
+      ctx.arc(10, y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 4. Moving Horizontal White Dots (Continuous treadmill motion)
+    ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+    const dotSpacing = 22;
+    const offset = (sec * 24) % dotSpacing;
+    for (let x = 25 - offset; x < w - 10; x += dotSpacing) {
+      if (x >= 20) {
+        ctx.beginPath();
+        ctx.arc(x, h - 8, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    if (gameState !== "FLYING") return;
+
+    // 5. Plane Elevation & Natural Floating Cruise
+    const enterDuration = 2.2;
+    const tNorm = Math.min(1, sec / enterDuration);
+    const easeT = 1 - Math.pow(1 - tNorm, 3);
+
+    const startX = 14;
+    const startY = h - 14;
+    const cruiseX = w - 85;
+    const cruiseY = 60;
+
+    // Organic hover floating oscillations (Unpredictable)
+    const floatY = Math.sin(sec * 3.5) * 6 + Math.cos(sec * 1.8) * 3;
+    const floatX = Math.cos(sec * 2.2) * 4;
+
+    const planeX = startX + (cruiseX - startX) * easeT + (tNorm >= 1 ? floatX : 0);
+    const planeY = startY + (cruiseY - startY) * easeT + (tNorm >= 1 ? floatY : 0);
+
+    const ctrlX = startX + (planeX - startX) * 0.55;
+    const ctrlY = startY;
+
+    // Gradient fill under curve
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.quadraticCurveTo(ctrlX, ctrlY, planeX, planeY);
+    ctx.lineTo(planeX, startY);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, planeY, 0, startY);
+    grad.addColorStop(0, "rgba(229, 9, 20, 0.45)");
+    grad.addColorStop(1, "rgba(229, 9, 20, 0.0)");
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Red flight line
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.quadraticCurveTo(ctrlX, ctrlY, planeX, planeY);
+    ctx.strokeStyle = "#e50914";
+    ctx.lineWidth = 3.5;
+    ctx.stroke();
+
+    // Draw Vector Monoplane
+    drawPlane(planeX, planeY, sec);
   }
 
-  addResultRecord(roundId, drawnNumbers);
-  renderHistoryView();
-  renderLeadersTable(userTotalWin);
-  postParent({ type: 'BET_ENDED' });
+  function drawPlane(x, y, sec) {
+    ctx.save();
+    ctx.translate(x, y);
+    const tilt = -0.22 + Math.sin(sec * 3.5) * 0.04;
+    ctx.rotate(tilt);
+    ctx.scale(1.3, 1.3);
 
-  // Update authoritative balance
-  refreshBalance();
-}
+    // Red Fuselage
+    ctx.fillStyle = "#e50914";
+    ctx.beginPath();
+    ctx.moveTo(-18, 0);
+    ctx.lineTo(12, -4);
+    ctx.lineTo(18, 0);
+    ctx.lineTo(12, 4);
+    ctx.lineTo(-18, 2);
+    ctx.closePath();
+    ctx.fill();
 
-/**
- * TOAST
- */
-let toastTimeout = null;
-function showToast(msg, type = 'error') {
-  const overlay = document.getElementById('toast-overlay');
-  const box = document.getElementById('toast-box');
-  const msgEl = document.getElementById('toast-message');
-  const icon = document.getElementById('toast-icon');
+    // Wing
+    ctx.fillStyle = "#b70710";
+    ctx.beginPath();
+    ctx.moveTo(-4, -14);
+    ctx.lineTo(4, 0);
+    ctx.lineTo(-6, 0);
+    ctx.closePath();
+    ctx.fill();
 
-  box.className = `toast-box ${type}`;
-  msgEl.textContent = msg;
+    // Cockpit Window
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.ellipse(3, -2, 4, 2, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-  if (type === 'error') {
-    icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>`;
-  } else {
-    icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>`;
+    // Tail Fin
+    ctx.fillStyle = "#b70710";
+    ctx.beginPath();
+    ctx.moveTo(-14, 0);
+    ctx.lineTo(-20, -8);
+    ctx.lineTo(-16, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // High speed propeller
+    ctx.strokeStyle = "#ff4444";
+    ctx.lineWidth = 2;
+    ctx.save();
+    ctx.translate(19, 0);
+    ctx.rotate(sec * 40);
+    ctx.beginPath();
+    ctx.moveTo(0, -8);
+    ctx.lineTo(0, 8);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
   }
 
-  overlay.style.display = 'block';
-  if (toastTimeout) clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(hideToast, 3500);
-}
+  /* =====================================================================
+     7. DATABASE & BLENDED COMMUNITY FEEDS (Exact to Screenshots 1, 4, 5)
+     ===================================================================== */
+  let activeTabName = 'all';
+  let blendedFeed = [];
 
-function hideToast() {
-  document.getElementById('toast-overlay').style.display = 'none';
-}
-
-/**
- * LOBBY EXIT CONFIRMATION
- */
-function exitToLobby() {
-  if (myActiveTickets.length > 0) {
-    const confirmExit = confirm("You have active bets in this round! The draw will continue on the server and your balance will be credited. Do you want to exit to Lobby?");
-    if (!confirmExit) return;
-  }
-  postParent({ type: 'EXIT_GAME' });
-}
-
-window.addEventListener('beforeunload', (e) => {
-  if (myActiveTickets.length > 0) {
-    e.preventDefault();
-    e.returnValue = "You have active tickets running!";
-  }
-});
-
-/**
- * TABS, STATS, RESULTS & LEADERS
- */
-function switchTab(id, tabEl) {
-  playSynth(600, 0.02);
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.subview').forEach(s => s.classList.remove('active'));
-
-  if (tabEl) tabEl.classList.add('active');
-  const view = document.getElementById(`view-${id}`);
-  if (view) view.classList.add('active');
-}
-
-function addResultRecord(id, balls) {
-  const container = document.getElementById('results-container');
-  const row = document.createElement('div');
-  row.className = 'result-row-card';
-  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-  row.innerHTML = `
-    <div class="res-draw-col">
-      <div style="font-weight:bold; font-size:11px; color:var(--accent-green-bright); display:flex; align-items:center; gap:2px;">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        ${id}
-      </div>
-      <div style="font-size:9px; color:var(--text-muted);">${time}</div>
-    </div>
-    <div class="res-balls-grid">
-      ${balls.map(n => `<div class="res-mini-ball">${n}</div>`).join('')}
-    </div>
-  `;
-  container.prepend(row);
-}
-
-function renderHistoryView() {
-  const container = document.getElementById('history-container');
-  if (fullHistory.length === 0) return;
-  container.innerHTML = fullHistory.map(h => `
-    <div class="ticket-row">
-      <div class="ticket-user-line">
-        <span>Draw ID: ${h.roundId}</span>
-        <span class="${h.status === 'WON' ? 'status-won' : 'status-lost'}">${h.status}</span>
-      </div>
-      <div class="ticket-numbers-grid">
-        ${h.picks.map(p => `<div class="ticket-slot">${p}</div>`).join('')}
-      </div>
-      <div class="ticket-bottom-line">
-        <span>Bet: ${h.amount} ETB</span>
-        <span>${h.status === 'WON' ? '+' + h.win.toFixed(0) + ' ETB' : '0 ETB'} (${h.hits} hits)</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderLeadersTable(userWin = 0) {
-  const tbody = document.getElementById('leaders-tbody');
-  const baseLeaders = [
-    { rank: 1, user: "b***w", bet: 600, win: 30000 },
-    { rank: 2, user: "y***o", bet: 630, win: 30000 },
-    { rank: 3, user: "i***s", bet: 1000, win: 20000 },
-    { rank: 4, user: "w***j", bet: 600, win: 15000 },
-    { rank: 5, user: "d***a", bet: 200, win: 8000 }
+  const DEMO_PLAYERS = [
+    { user: "2****0", bet: 1400.00, target: 1.83, cashed: false },
+    { user: "2****7", bet: 200.00, target: 1.54, cashed: false },
+    { user: "2****9", bet: 173.00, target: 2.10, cashed: false },
+    { user: "2****3", bet: 200.00, target: 1.25, cashed: false },
+    { user: "2****8", bet: 39.00, target: 1.15, cashed: false },
+    { user: "2****1", bet: 149.00, target: 1.01, cashed: false },
+    { user: "2****4", bet: 161.00, target: 3.40, cashed: false },
+    { user: "2****2", bet: 158.00, target: 4.20, cashed: false },
+    { user: "2****0", bet: 501.00, target: 1.45, cashed: false }
   ];
 
-  if (userWin > 1000) {
-    baseLeaders.unshift({ rank: 1, user: "You", bet: currentBetAmount, win: userWin });
+  function addHistoryPill(mult) {
+    const v = parseFloat(mult);
+    const ticker = document.getElementById("historyTicker");
+    const pill = document.createElement("span");
+    pill.className = `mult-pill ${v >= 10 ? 'pill-magenta' : v >= 2 ? 'pill-purple' : 'pill-blue'}`;
+    pill.innerText = v.toFixed(2) + "x";
+    ticker.insertBefore(pill, ticker.firstChild);
+    if (ticker.children.length > 25) ticker.removeChild(ticker.children[ticker.children.length - 2]);
+
+    // Modal Grid
+    const modalGrid = document.getElementById("modalHistoryGrid");
+    const mPill = document.createElement("span");
+    mPill.className = pill.className;
+    mPill.innerText = pill.innerText;
+    modalGrid.insertBefore(mPill, modalGrid.firstChild);
   }
 
-  tbody.innerHTML = baseLeaders.slice(0, 5).map((l, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td>${l.user}</td>
-      <td>${l.bet}</td>
-      <td style="color:var(--accent-green-bright); font-weight:bold;">${l.win.toLocaleString()} ETB</td>
-    </tr>
-  `).join('');
-}
-
-/**
- * MODAL RULES & PAYTABLE
- */
-function openRulesModal() {
-  document.getElementById('rules-modal').style.display = 'flex';
-  switchModalTab('rules');
-}
-
-function closeRulesModal() {
-  document.getElementById('rules-modal').style.display = 'none';
-}
-
-function switchModalTab(tab) {
-  document.getElementById('modal-nav-rules').classList.toggle('active', tab === 'rules');
-  document.getElementById('modal-nav-paytable').classList.toggle('active', tab === 'paytable');
-
-  const content = document.getElementById('modal-content');
-  if (tab === 'rules') {
-    content.innerHTML = `
-      <h4 style="color:#fff; margin-bottom:4px;">How to play</h4>
-      <p style="margin-bottom:8px;">Choose 1 to 10 numbers from 1 to 80. Each round runs on an 80-second continuous cycle (60s betting + 20s steady live draw). 20 numbers are drawn by certified server RNG.</p>
-      <h4 style="color:#fff; margin-bottom:4px;">Disconnection & Lobby Policy</h4>
-      <p>If you leave the game while tickets are active, the round settles on the server automatically and all winnings remain safe in your authoritative balance.</p>
-    `;
-  } else {
-    let t = `<table class="paytable-grid-table"><thead><tr><th>Hits</th>`;
-    for (let p = 1; p <= 10; p++) t += `<th>${p}</th>`;
-    t += `</tr></thead><tbody>`;
-
-    for (let h = 0; h <= 10; h++) {
-      t += `<tr><td style="font-weight:bold; color:#fff;">${h}</td>`;
-      for (let p = 1; p <= 10; p++) {
-        const mults = paytable[String(p)] || [];
-        const m = mults[h];
-        t += `<td>${m !== undefined && m > 0 ? m + 'x' : '-'}</td>`;
+  async function loadFeed() {
+    const res = await api('/api/public/feed?game=Aviator');
+    if (res && res.success) {
+      if (res.crashes && res.crashes.length > 0) {
+        const ticker = document.getElementById("historyTicker");
+        ticker.innerHTML = '<div class="history-more-btn" onclick="openHistoryModal()">...</div>';
+        document.getElementById("modalHistoryGrid").innerHTML = '';
+        res.crashes.slice(0, 20).forEach(c => addHistoryPill(c));
       }
-      t += `</tr>`;
+
+      blendedFeed = [];
+      if (res.wins && res.wins.length > 0) {
+        res.wins.forEach(w => {
+          blendedFeed.push({
+            user: w.user || 'User',
+            bet: Number(w.bet || 4),
+            mult: Number(w.mult || 1.2),
+            win: Number(w.win || 0),
+            cashed: true
+          });
+        });
+      }
+
+      DEMO_PLAYERS.forEach(d => {
+        blendedFeed.push({
+          user: d.user,
+          bet: d.bet,
+          target: d.target,
+          mult: d.target,
+          win: Number((d.bet * d.target).toFixed(2)),
+          cashed: false
+        });
+      });
+
+      renderFeedList();
     }
-    t += `</tbody></table>`;
-    content.innerHTML = t;
   }
-}
 
-document.addEventListener('pointerdown', () => { getAudioContext(); }, { once: true });
+  function updateLiveFeedCashouts(mult) {
+    let changed = false;
+    blendedFeed.forEach(row => {
+      if (!row.cashed && row.target && mult >= row.target) {
+        row.cashed = true;
+        changed = true;
+      }
+    });
+    if (changed && activeTabName === 'all') {
+      renderFeedList();
+    }
+  }
 
-window.addEventListener('DOMContentLoaded', () => {
-  const { roundId } = getGlobalRoundInfo();
-  dynamicAllCount = computeBaseRoundBets(roundId);
-  document.getElementById('lbl-all-count').textContent = dynamicAllCount;
+  function switchBetsTab(tab, el) {
+    activeTabName = tab;
+    document.querySelectorAll(".b-tab-btn").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
 
-  buildGrid();
-  renderBetDisplay();
-  updateDynamicHotColdAndStats();
-  renderLeadersTable();
-  renderHistoryView();
-  loadPersistedActiveTickets(roundId);
-  initDynamicPlayerFeed();
-});
+    const topSub = document.getElementById("topSubfilters");
+    const prevBanner = document.getElementById("prevRoundBanner");
+
+    topSub.style.display = (tab === 'top') ? 'flex' : 'none';
+    prevBanner.style.display = (tab === 'prev') ? 'block' : 'none';
+
+    renderFeedList();
+  }
+
+  function filterTop(type, el) {
+    el.parentElement.querySelectorAll(".subfilter-btn").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    renderFeedList();
+  }
+
+  function filterTopPeriod(period, el) {
+    el.parentElement.querySelectorAll(".subfilter-btn").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    renderFeedList();
+  }
+
+  function renderFeedList() {
+    const list = document.getElementById("betsListFeed");
+    list.innerHTML = "";
+
+    let data = [...blendedFeed];
+    if (activeTabName === 'top') {
+      data.sort((a, b) => b.win - a.win);
+    } else if (activeTabName === 'prev') {
+      data = data.filter(d => d.cashed);
+    }
+
+    let total = 0;
+    data.slice(0, 30).forEach(r => {
+      if (r.cashed) total += r.win;
+      const row = document.createElement("div");
+      row.className = `bet-row-item ${r.cashed ? 'cashed' : ''}`;
+      row.innerHTML = `
+        <div class="player-col">
+          <svg class="avatar-icon-svg" viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+          <span>${r.user}</span>
+        </div>
+        <div class="bet-amt-col">${r.bet.toFixed(2)}</div>
+        <div class="mult-col">${r.cashed ? r.mult.toFixed(2) + 'x' : '-'}</div>
+        <div class="win-amt-col">${r.cashed ? '+' + r.win.toFixed(2) : '-'}</div>
+      `;
+      list.appendChild(row);
+    });
+
+    document.getElementById("lblBetsCount").innerText = `${data.length}/87 Bets`;
+    document.getElementById("lblTotalWin").innerText = `${total.toFixed(2)} ETB`;
+  }
+
+  /* =====================================================================
+     8. UI UTILITIES & MODALS
+     ===================================================================== */
+  function showToast(msg) {
+    const container = document.getElementById("toastContainer");
+    const bubble = document.createElement("div");
+    bubble.className = "toast-bubble";
+    bubble.innerText = msg;
+    container.appendChild(bubble);
+    setTimeout(() => {
+      bubble.style.opacity = '0';
+      bubble.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => bubble.remove(), 300);
+    }, 2400);
+  }
+
+  function toggleSidebar(open) {
+    document.getElementById("sidebarOverlay").style.display = open ? "flex" : "none";
+  }
+
+  function openHistoryModal() {
+    document.getElementById("historyModal").style.display = "flex";
+  }
+
+  function closeHistoryModal() {
+    document.getElementById("historyModal").style.display = "none";
+  }
+
+  // Initial draw
+  renderCanvasScene(0);
+
+  // Start Autonomous Loop
+  startAutonomousWaitingPhase();
 </script>
 </body>
 </html>
